@@ -30,7 +30,7 @@
 ```bash
 # الخلفية (Python 3.11+)
 pip install -r requirements.txt
-cd backend && uvicorn app.main:app --reload --port 8000
+cd backend && python -m uvicorn app.main:app --reload --port 8000
 
 # الواجهة (Node 20+) في نافذة أخرى
 cd frontend && npm install && npm run dev
@@ -38,7 +38,7 @@ cd frontend && npm install && npm run dev
 ```
 
 يستخدم SQLite افتراضيًا (`data/hcc.db`) ويحفظ الصور في `data/storage/`.
-للعرض بمناطق وهمية تُظهر كل الألوان: `HCC_DETECTOR=mock uvicorn app.main:app`.
+للعرض بمناطق وهمية تُظهر كل الألوان: `HCC_DETECTOR=mock python -m uvicorn app.main:app`.
 
 ### Docker (PostgreSQL)
 
@@ -107,7 +107,7 @@ tests/
   pip install -r requirements-sam2.txt
   python scripts/download_sam2.py tiny      # يطبع متغيرات البيئة المطلوبة
   HCC_SEGMENTER=sam2 HCC_SAM2_CHECKPOINT=models/sam2.1_hiera_tiny.pt \
-    HCC_SAM2_CONFIG=configs/sam2.1/sam2.1_hiera_t.yaml uvicorn app.main:app
+    HCC_SAM2_CONFIG=configs/sam2.1/sam2.1_hiera_t.yaml python -m uvicorn app.main:app
   ```
   أو `HCC_SAM2_MODEL_ID=facebook/sam2.1-hiera-tiny` للتنزيل من Hugging Face.
 
