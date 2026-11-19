@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تقرير فحص {{ insp.case_number }}</title>
+<style>
+  :root { --sand:#F4ECDD; --clay:#A0522D; --brown:#5C3A21; --navy:#1F2F4A; --sage:#5F7F68; --ink:#2B2118; --line:#D9CBB2; }
+  * { box-sizing: border-box; }
+  body { font-family: "Noto Naskh Arabic","Tahoma","Segoe UI",sans-serif; color: var(--ink); background: #fff; margin: 0; padding: 24px; line-height: 1.7; }
+  header { border-bottom: 4px solid var(--clay); padding-bottom: 12px; margin-bottom: 16px; }
+  h1 { color: var(--navy); margin: 0 0 4px; font-size: 24px; }
+  h2 { color: var(--brown); border-right: 5px solid var(--clay); padding-right: 10px; font-size: 18px; margin-top: 28px; }
+  .banner { padding: 10px 14px; border-radius: 6px; margin: 10px 0; font-weight: bold; }
+  .warn { background: #FFF4E0; border: 1px solid #F0B866; color: #7A4A00; }
+  .ok { background: #E8F2EA; border: 1px solid var(--sage); color: #2E5237; }
+  .danger { background: #FBE9E7; border: 1px solid #D32F2F; color: #8E1B1B; }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .meta div { background: var(--sand); padding: 8px 12px; border-radius: 6px; }
+  .meta b { color: var(--navy); display: block; font-size: 12px; }
+  .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .imgs figure { margin: 0; }
+  .imgs img { width: 100%; border: 1px solid var(--line); border-radius: 4px; }
+  figcaption { font-size: 12px; color: #6b5a48; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  th { background: var(--navy); color: #fff; padding: 6px; text-align: right; }
+  td { border-bottom: 1px solid var(--line); padding: 6px; vertical-align: top; }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-left: 6px; vertical-align: middle; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; background: #eee; }
+  .pill.approved { background: #DCEFE0; color: #2E5237; }
+  .pill.edited { background: #E3E9F5; color: var(--navy); }
+  .pill.agent { background: #F3EBDD; color: var(--brown); }
+  .pill.needs_review { background: #FDE6D8; color: #8A3B00; }
+  .pill.low { background: #FDECEC; color: #A12; }
+  .legend span { margin-left: 16px; font-size: 13px; }
+  .src { font-size: 12px; color: #4a3d30; }
+  .src q { font-family: Georgia, serif; direction: ltr; unicode-bidi: embed; }
+  footer { margin-top: 30px; font-size: 12px; color: #6b5a48; border-top: 1px solid var(--line); padding-top: 10px; }
+  @media (max-width: 700px) { .imgs { grid-template-columns: 1fr; } body { padding: 16px; } }
+  @media print { body { padding: 0; } h2 { page-break-after: avoid; } tr { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>تقرير فحص جدار طيني — Heritage Conservation Copilot</h1>
+  <div>حالة رقم <b>{{ insp.case_number }}</b> · أُنشئ التقرير {{ generated_at }}</div>
+</header>
+
+{% if is_approved %}
+<div class="banner ok">معتمد من المختص: {{ insp.approved_by }} بتاريخ {{ insp.approved_at[:16].replace('T',' ') }}</div>
+{% else %}
+<div class="banner danger">مسودة غير معتمدة — حالة الاعتماد: {{ status_ar.get(insp.status, insp.status) }}. لا تُستخدم لأي تدخل ميداني.</div>
+{% endif %}
+<div class="banner warn">{{ warning }} نتائج الكشف أولية وتعتمد على: {{ detector.disclaimer or 'غير محدد' }}</div>
+
+<h2>بيانات الحالة</h2>
+<div class="meta">
+  <div><b>رقم الحالة</b>{{ insp.case_number }}</div>
+  <div><b>تاريخ الفحص (التصوير)</b>{{ insp.captured_at[:10] }}</div>
+  <div><b>رقم الجدار</b>{{ insp.wall.code }}</div>
+  <div><b>المبنى</b>{{ insp.wall.building_name or '—' }}</div>
+  <div><b>أعدّه</b>{{ insp.created_by }}</div>
+  <div><b>الكاشف</b>{{ detector.name }} ({{ 'مُقيّم' if detector.validated else 'غير مُقيّم' }})</div>
+  <div><b>الوجوه المخفية</b>{{ insp.privacy.faces_hidden or 0 }}{% if insp.privacy.manual_boxes %} + {{ insp.privacy.manual_boxes }} يدويًا{% endif %}</div>
+  <div><b>الشبكة المرجعية</b>{{ insp.grid.cols }}×{{ insp.grid.rows }} ({{ 'مؤقتة' if insp.grid.type == 'temporary' else insp.grid.type }})</div>
+</div>
+
+{% if image_b64 %}
+<h2>الصورة وخريطة التلف</h2>
+<div class="imgs">
+  <figure><img src="{{ image_b64 }}" alt="الصورة بعد إخفاء الوجوه"><figcaption>الصورة بعد إخفاء الوجوه آليًا. لم تُحفظ الصورة الأصلية.</figcaption></figure>
+  <figure><img src="{{ atlas_b64 }}" alt="خريطة التلف"><figcaption>خريطة التلف الموحدة مع الشبكة المرجعية.</figcaption></figure>
+</div>
+<div class="legend">{% for label, color in legend %}<span><i class="sw" style="background:{{ color }}"></i>{{ label }}</span>{% endfor %}</div>
+{% endif %}
+
+<h2>ملخص</h2>
+<p>عدد المناطق: <b>{{ insp.summary.total }}</b> · معتمدة: {{ insp.summary.approved }} · عدّلها المختص: {{ insp.summary.edited }} · نتيجة الوكيل: {{ insp.summary.agent }} · منخفضة الثقة: {{ insp.summary.low_confidence }} · تحتاج فحصًا ميدانيًا: {{ insp.summary.field_inspection }}</p>
+{% if sufficiency.reasons_ar %}
+<div class="banner warn">كفاية الصورة: {{ sufficiency.recommendation_ar }}<ul>{% for r in sufficiency.reasons_ar %}<li>{{ r }}</li>{% endfor %}</ul></div>
+{% endif %}
+
+<h2>جدول أنواع التلف</h2>
+<table>
+  <thead><tr><th>المنطقة</th><th>النوع</th><th>الموقع</th><th>النسبة من الصورة</th><th>الثقة</th><th>الأولوية</th><th>الحالة</th><th>الوصف وملاحظة المختص</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td>R{{ r.index }}</td>
+    <td><i class="sw" style="background:{{ r.color }}"></i>{{ r.damage_label_ar }}</td>
+    <td>{{ r.grid_cells|join('، ') }}</td>
+    <td>{{ '%.2f'|format(r.area_fraction * 100) }}%</td>
+    <td>{{ '%.0f'|format(r.confidence * 100) }}% <span class="pill {{ 'low' if r.low_confidence else '' }}">{{ conf_source_ar.get(r.confidence_source, r.confidence_source) }}</span></td>
+    <td>{{ priority_ar.get(r.priority, r.priority) }}</td>
+    <td><span class="pill {{ r.status }}">{{ r.status_label_ar }}</span>{% if r.needs_field_inspection %}<br><span class="pill needs_review">فحص ميداني</span>{% endif %}</td>
+    <td>{{ r.description }}{% if r.note %}<br><b>ملاحظة المختص:</b> {{ r.note }}{% endif %}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="8">لا توجد مناطق تلف مسجلة. هذا لا يعني خلو الجدار من التلف.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>المعالجات المقترحة والمواد والأدوات</h2>
+<table>
+  <thead><tr><th>المنطقة</th><th>المعالجة</th><th>المواد</th><th>الأدوات</th><th>المصدر</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td>R{{ r.index }}</td>
+    {% if r.treatment %}
+    <td><b>{{ r.treatment.title_ar }}</b><br>{{ r.treatment.usage_ar }}<br><span class="pill">{{ r.treatment.approval_label_ar }}</span>
+      {% for c in r.treatment.cautions_ar %}<br>⚠ {{ c }}{% endfor %}</td>
+    <td>{{ r.materials|join('، ') }}</td>
+    <td>{{ r.tools|join('، ') }}</td>
+    <td class="src">{% for s in r.treatment.sources[:2] %}{{ s.title }} ({{ s.publisher }}, {{ s.year }}) — {{ s.locator }}<br><q>{{ s.quote }}</q><br>{% endfor %}</td>
+    {% else %}
+    <td colspan="4">{{ insufficient }}</td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if field_needed %}
+<h2>توصية بالفحص الميداني</h2>
+<p>يُنصح بفحص ميداني للمناطق: {% for r in field_needed %}R{{ r.index }} ({{ r.grid_cells|join('، ') }}){% if not loop.last %}، {% endif %}{% endfor %}.</p>
+{% endif %}
+
+<h2>ملاحظات المختص</h2>
+<p>{{ insp.expert_notes or '—' }}</p>
+
+<h2>سجل التعديلات</h2>
+<table>
+  <thead><tr><th>الوقت</th><th>المستخدم</th><th>الإجراء</th><th>الحقل</th><th>القيمة القديمة</th><th>القيمة الجديدة</th><th>السبب</th></tr></thead>
+  <tbody>
+  {% for a in audit %}
+  <tr><td>{{ a.at[:19].replace('T',' ') }}</td><td>{{ a.user }}</td><td>{{ a.action }}</td><td>{{ a.field or '—' }}</td>
+    <td>{{ (a.old_value|string)[:80] if a.old_value is not none else '—' }}</td>
+    <td>{{ (a.new_value|string)[:80] if a.new_value is not none else '—' }}</td><td>{{ a.reason or '—' }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>منهجية وقيود</h2>
+<ul>
+  <li>قواعد الأولوية المستخدمة مؤقتة:{% for p in priority_rules %} {{ p }}{% endfor %}</li>
+  <li>المساحة نسبة من مساحة الصورة وليست بالمتر المربع، لعدم توفر مرجع قياس.</li>
+  <li>لم تُقس دقة الكشف (Precision/Recall/IoU) بعد، ولا يُدّعى أي رقم دقة.</li>
+  <li>المعالجات مسترجعة فقط من قاعدة المعرفة المرفقة، ولا يولّد النظام معالجات أو مراجع.</li>
+</ul>
+
+<footer>Heritage Conservation Copilot — الوكيل يقترح، والمختص يقرر. خصوصية: تم إخفاء الوجوه آليًا ولا يُستخدم النظام لتتبع الأشخاص أو تحليل سلوك الزوار.</footer>
+</body>
+</html>

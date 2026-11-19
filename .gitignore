@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+data/
+export/
+node_modules/
+frontend/dist/
+sample_data/synthetic/
+*.log
+.DS_Store

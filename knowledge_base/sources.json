@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nps-brief-5",
+    "title": "Preservation Brief 5: Preservation of Historic Adobe Buildings",
+    "authors": "de Teel Patterson Tiller; David W. Look (technical editor: Lee H. Nelson)",
+    "publisher": "U.S. Department of the Interior, National Park Service, Technical Preservation Services",
+    "year": "1978",
+    "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf",
+    "license": "U.S. federal government work (public domain)",
+    "status": "read",
+    "context_note_ar": "مرجع أمريكي عن مباني الأدوبي في جنوب غرب الولايات المتحدة، صادر عام 1978. يُستخدم هنا لأنه مصدر عام موثوق ومتاح، لكنه ليس خاصًا بالعمارة النجدية ولا بحي الطريف، وبعض توصياته قد تكون قديمة. لا يغني عن مكتبة المعالجات المعتمدة من الجهة المختصة.",
+    "page_note": "أرقام الصفحات تقريبية (النص مأخوذ من نسخة ممسوحة ضوئيًا)."
+  },
+  {
+    "id": "getty-terra-lit-review",
+    "title": "Terra Literature Review: An Overview of Research in Earthen Architecture Conservation",
+    "publisher": "Getty Conservation Institute",
+    "year": "2008",
+    "url": "https://getty.edu/conservation/publications_resources/pdf_publications/terra_literature_review.html",
+    "status": "not_read",
+    "context_note_ar": "مرجع مهم لم يُقرأ نصه بعد (تعذر الوصول إليه من بيئة التطوير). لا تُبنى عليه أي توصية حتى يُقرأ."
+  },
+  {
+    "id": "icomos-iscs-glossary",
+    "title": "ICOMOS-ISCS: Illustrated glossary on stone deterioration patterns (Arabic edition)",
+    "publisher": "ICOMOS International Scientific Committee for Stone",
+    "year": "2008",
+    "url": "https://openarchive.icomos.org/id/eprint/2096",
+    "status": "not_read",
+    "context_note_ar": "مرجع مصطلحات لأنماط تلف الحجر، يُستأنس به لتوحيد المصطلحات فقط، وليس مرجع معالجات للطين."
+  }
+]

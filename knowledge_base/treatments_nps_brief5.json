@@ -1,0 +1,158 @@
+{
+  "library": "nps-brief-5",
+  "note": "Every entry below is derived only from NPS Preservation Brief 5 (1978). Quotes are verbatim (OCR source; pages approximate). Status demo_unapproved until a conservation authority reviews them.",
+  "treatments": [
+    {
+      "id": "nps5-crack-repoint",
+      "damage_types": ["crack"],
+      "title_ar": "ملء التشققات بمونة طينية جديدة (بطريقة مشابهة لإعادة تكحيل المفاصل)",
+      "method_ar": "تُنظّف الشقوق وتُفرّغ ثم تُملأ بمونة طينية (أدوبي) جديدة، بعد التأكد من أن التشقق ليس علامة على مشكلة إنشائية.",
+      "usage_ar": "تُفرّغ الشقوق إلى عمق يعادل مرتين إلى ثلاث مرات عرض مفصل المونة، تُرش الطوب برذاذ ماء خفيف لتحسين الالتصاق، ثم تُملأ بالمالج أو مسدس حقن كبير.",
+      "materials": ["مونة طينية جديدة (طين، رمل، ماء، وقد يضاف تبن)", "ماء للرش الخفيف"],
+      "tools": ["أداة تفريغ وتنظيف الشقوق", "مالج (Trowel)", "مسدس حقن مونة كبير (Grout gun)", "رشاش ماء"],
+      "cautions_ar": [
+        "التشققات الواسعة أو الكثيرة تدل غالبًا على مشكلة إنشائية ويجب أن يفحصها مختص قبل الملء.",
+        "لا تُستبدل المونة الطينية بمونة جيرية أو أسمنتية."
+      ],
+      "keywords": ["تشقق", "شق", "شعري", "مونة", "إنشائي", "crack"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Replacing Mortar, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "In repairing adobe cracks, a procedure similar to repointing masonry joints may be used."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Replacing Mortar, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "A trowel or a large grout gun with new adobe mud mortar may then be used to fill the cracks."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Structural Damage and Cracking, pp.4-5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "cracks, like all structural problems, should be examined by a professional who can make recommendations"}
+      ]
+    },
+    {
+      "id": "nps5-crack-structural",
+      "damage_types": ["crack", "material_loss"],
+      "title_ar": "تقييم إنشائي للتشققات الواسعة أو الجدران المائلة والمنتفخة",
+      "method_ar": "عند التشقق الواسع أو الميلان أو الانتفاخ يُستعان بمهندس إنشائي أو مهندس تربة له خبرة في المباني الطينية، وقد تشمل الحلول إصلاح الأساسات أو إعادة استقامة الجدران أو تدعيمها.",
+      "usage_ar": "لا يُنفذ أي ترميم قبل تحديد سبب المشكلة وتحليلها ومعالجتها. هذه توصية بإحالة الحالة وليست إجراءً ميدانيًا مباشرًا.",
+      "materials": ["حسب تقرير المهندس الإنشائي"],
+      "tools": ["أدوات رصد التشققات ومتابعتها", "حسب تقرير المهندس الإنشائي"],
+      "cautions_ar": ["الانتفاخ أو الترهل قد يكون ناتجًا عن الرطوبة الصاعدة أو أحمال السقف الزائدة."],
+      "keywords": ["انتفاخ", "ميلان", "أساس", "إنشائي", "واسع", "structural"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Structural Damage, p.4", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Solutions may involve repairing foundations, realigning leaning and bulging walls, buttressing walls"},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "General Advice, item 2, p.4", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Never begin restoration or repairs until the problems that have been causing the deterioration of the adobe have been found, analyzed, and solved."}
+      ]
+    },
+    {
+      "id": "nps5-plaster-renew",
+      "damage_types": ["plaster_loss"],
+      "title_ar": "إزالة اللياسة الطينية المتدهورة واستبدالها بمواد مماثلة",
+      "method_ar": "تُكشط اللياسة الطينية المتدهورة وتُستبدل بلياسة طينية مماثلة للأصل. تغطية الطوب الطيني بلياسة طينية أفضل حتى لو احتاجت تجديدًا أكثر تكرارًا.",
+      "usage_ar": "تُزال الأجزاء المتدهورة دون الإضرار بالطوب تحتها، ثم تُطبق لياسة من طين ورمل وماء وتبن، وتُفحص طبقات اللياسة دوريًا وتُصلح عند الحاجة.",
+      "materials": ["لياسة طينية (طين، رمل، ماء، تبن أو عشب)"],
+      "tools": ["مكشطة", "مالج", "أدوات تنعيم (حجارة صغيرة مستديرة قليلًا وفق الممارسة التقليدية)"],
+      "cautions_ar": [
+        "التدهور الظاهر في السطح قد يخفي تدهورًا أكبر تحته.",
+        "لا تُوضع طبقة جير أو أسمنت جديدة فوق طبقة متدهورة.",
+        "اللياسة الأسمنتية لا ترتبط بالطوب الطيني غير المثبت وتحبس الرطوبة."
+      ],
+      "keywords": ["لياسة", "طلاء", "تقشر", "تساقط", "plaster", "render"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Replacing Surface Coatings, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "When the coating has been mud plaster, the process requires that the deteriorated mud plaster be scraped off and replaced with like materials"},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Replacing Surface Coatings, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "It is always better to cover adobe with mud plaster even though the mud plaster must be renewed more frequently."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Mud Plaster, p.3", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "clay, sand, water, and straw or grass"}
+      ]
+    },
+    {
+      "id": "nps5-moisture-drainage",
+      "damage_types": ["moisture_erosion"],
+      "title_ar": "معالجة مصدر الرطوبة أولًا: تصريف المياه وتسوية الأرض حول الجدار",
+      "method_ar": "الرطوبة الصاعدة ومياه الأمطار المتجمعة عند القاعدة تسبب تجويف أسفل الجدار. العلاج يبدأ بإزالة السبب: تسوية الأرض لتنحدر بعيدًا عن المبنى، وصيانة مصارف السطح، وعند الحاجة مصارف عند الأساس.",
+      "usage_ar": "يُعاد تسوية الأرض بحيث تنحدر بعيدًا عن الجدار، وتُزال النباتات الملاصقة إن كانت تسبب الرطوبة، ويُنظر في مصرف عند الأساس (خندق بحصى وأنبوب) بإشراف مختص.",
+      "materials": ["حصى لملء خندق التصريف", "أنابيب تصريف (فخار أو بلاستيك)", "غشاء بولي إيثيلين لتبطين الخندق"],
+      "tools": ["أدوات حفر وتسوية", "ميزان تسوية"],
+      "cautions_ar": [
+        "الحفر والتسوية وإزالة النباتات قد تدمر بقايا أثرية، فتلزم موافقة واستشارة أثرية مسبقة.",
+        "الترقيع والطلاء يعالجان الأثر فقط ولا يعالجان سبب الرطوبة."
+      ],
+      "keywords": ["رطوبة", "صاعدة", "قاعدة", "تجويف", "أمطار", "تصريف", "moisture", "coving"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Ground water rises through capillary action into the wall and causes the adobe to erode, bulge, and cove."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "surface coatings and patching only repair the effects of ground water and wind erosion, they cannot cure the cause."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "A Word of Caution, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Plant removal, regrading, or trenching may be potentially destructive to archeological remains"}
+      ]
+    },
+    {
+      "id": "nps5-coving-patch",
+      "damage_types": ["moisture_erosion", "material_loss"],
+      "title_ar": "ترقيع التجويف أسفل الجدار بطين جديد بعد إيقاف مصدر الرطوبة",
+      "method_ar": "بعد معالجة التصريف، يُرمم التجويف عند قاعدة الجدار بترقيعه بطين أدوبي جديد ثم تغطيته بطبقة حماية تقليدية.",
+      "usage_ar": "يُنفذ فقط بعد التأكد من إيقاف الرطوبة الصاعدة، وإلا سيستمر التآكل.",
+      "materials": ["طين أدوبي جديد", "لياسة تقليدية للحماية"],
+      "tools": ["مالج", "مكشطة", "رشاش ماء"],
+      "cautions_ar": [
+        "الرقع الخرسانية واللياسة الأسمنتية والدعامات الخرسانية الملاصقة للتجويف لها أثر سلبي غالبًا لأنها تحبس الرطوبة خلفها."
+      ],
+      "keywords": ["تجويف", "قاعدة", "ترقيع", "رطوبة", "coving"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "concrete patches, cement stucco, and curb-like buttresses against the coving usually have a negative effect"},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "because moisture may be attracted and trapped behind the concrete."}
+      ]
+    },
+    {
+      "id": "nps5-brick-patch-replace",
+      "damage_types": ["material_loss"],
+      "title_ar": "ترقيع الطوب الطيني المتدهور جزئيًا أو استبداله بطوب طيني مماثل",
+      "method_ar": "الطوبة المتدهورة جزئيًا تُرقع في مكانها بكشط الجزء التالف واستبداله بطين مناسب. الطوب المتدهور كليًا يُستبدل بطوب طيني غير مثبت مماثل في القوام واللون، مع مونة طينية تقليدية.",
+      "usage_ar": "يُكشط الجزء التالف، ويُقص حتى الجزء السليم لتحقيق تطابق مستوٍ، ويُرش الطوب الجديد وما حوله برذاذ ماء خفيف دون إغراق، ثم يُثبت بمونة طينية تقليدية.",
+      "materials": ["طوب طيني غير مثبت مماثل للأصل في القوام واللون", "مونة طينية تقليدية", "طين للترقيع"],
+      "tools": ["مكشطة", "أداة قص", "مالج", "رشاش ماء"],
+      "cautions_ar": [
+        "بعض المختصين لا ينصحون بإعادة استخدام المواد المتساقطة لاحتوائها غالبًا على تركيز عالٍ من الأملاح.",
+        "الطوب المثبت الجاهز والطوب الخرساني غير متوافقين مع الطوب الطيني التاريخي.",
+        "الرطوبة الزائدة أثناء التنفيذ تسبب انتفاخ الطوب."
+      ],
+      "keywords": ["فقدان", "طوب", "استبدال", "تآكل", "بنيوي", "loss"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Repairing Adobe Brick, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "When an individual adobe brick has partially disintegrated, it may be patched in place."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Repairing Adobe Brick, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "every reasonable effort should be made to find clay with a texture and color similar to the original fabric."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Patching and Repairing Adobe Brick, p.7", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Spray (do not soak) the new brick and surrounding area lightly with water to facilitate a better bond."}
+      ]
+    },
+    {
+      "id": "nps5-edge-wind-repair",
+      "damage_types": ["edge_erosion"],
+      "title_ar": "إصلاح تآكل الحواف وأعالي الجدران بطين جديد وطبقة حماية تقليدية",
+      "method_ar": "مياه الأمطار والرياح تؤدي إلى استدارة الأركان والحواف وتآكل الأجزاء العليا. يُصلح التلف بطين أدوبي جديد ثم تُطبق طبقة سطحية تقليدية للحماية، مع ضمان تصريف جيد للسطح.",
+      "usage_ar": "تُرمم الحواف والأركان المتآكلة بطين جديد، وتُصان مصارف السطح بحيث لا تتجمع المياه أعلى الجدران.",
+      "materials": ["طين أدوبي جديد", "طبقة سطحية تقليدية (لياسة طينية)"],
+      "tools": ["مالج", "مكشطة", "رشاش ماء"],
+      "cautions_ar": [
+        "إضافة غطاء من الطوب المحروق لجدار قائم يغير مظهره ونسيجه تغييرًا جذريًا، فيحتاج قرارًا من الجهة المختصة.",
+        "تآكل الرياح يظهر عادة في النصف العلوي والأركان، بينما التجويف بفعل الرطوبة يظهر في الثلث السفلي: هذا يساعد على التمييز لكنه لا يغني عن الفحص."
+      ],
+      "keywords": ["حواف", "أركان", "شرفات", "أعلى", "رياح", "أمطار", "edge", "parapet"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Rain saturated adobe loses its cohesive strength and sloughs off forming rounded corners and parapets."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Wind Erosion, p.6", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Wind damage on adobe walls and roof surfaces should be repaired with new adobe mud."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Water Related Problems, p.5", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "the addition of a brick cap to an existing parapet wall creates a drastic change in a structure's appearance and fabric."}
+      ]
+    },
+    {
+      "id": "nps5-monitor-maintain",
+      "damage_types": ["crack", "plaster_loss", "moisture_erosion", "material_loss", "edge_erosion"],
+      "title_ar": "الرصد والصيانة الدورية",
+      "method_ar": "الصيانة الدورية هي مفتاح بقاء المباني الطينية: تُرصد بدايات التشقق والترهل والانتفاخ بانتظام، وتُعالج أضرار المياه في أبكر مراحلها، وتُفحص الطبقات السطحية دوريًا.",
+      "usage_ar": "يمكن استخدام المقارنة الزمنية في هذا النظام لتوثيق الرصد الدوري لنفس الجدار.",
+      "materials": ["لا ينطبق (إجراء رصد)"],
+      "tools": ["تصوير دوري من نفس الزاوية", "سجل رصد"],
+      "cautions_ar": ["الرصد لا يغني عن التدخل عند ظهور تلف نشط."],
+      "keywords": ["رصد", "صيانة", "دوري", "monitor", "maintenance"],
+      "approval": "demo_unapproved",
+      "sources": [
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Maintenance, p.8", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "Cyclical maintenance has always been the key to successful adobe building survival."},
+        {"title": "Preservation Brief 5: Preservation of Historic Adobe Buildings", "publisher": "National Park Service", "year": "1978", "locator": "Maintenance, p.8", "url": "https://www.nps.gov/orgs/1739/upload/preservation-brief-05-adobe.pdf", "quote": "The early stages of cracking, sagging, or bulging in adobe walls should be monitored regularly."}
+      ]
+    }
+  ]
+}
