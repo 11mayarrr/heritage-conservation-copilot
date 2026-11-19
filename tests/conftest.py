@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -19,7 +20,8 @@ def samples(tmp_path_factory) -> Path:
 
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
-    monkeypatch.setenv("HCC_DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
+    pg = os.environ.get("HCC_TEST_DATABASE_URL")  # e.g. postgresql+psycopg://hcc:hcc@localhost/hcc
+    monkeypatch.setenv("HCC_DATABASE_URL", pg or f"sqlite:///{tmp_path / 'test.db'}")
     monkeypatch.setenv("HCC_STORAGE_DIR", str(tmp_path / "storage"))
     monkeypatch.setenv("HCC_DETECTOR", "heuristic")
     from app import config
@@ -29,7 +31,12 @@ def client(tmp_path, monkeypatch):
     storage._storage = None
     from app.database.session import init_engine
 
-    init_engine()
+    engine = init_engine()
+    if pg:
+        from app.database.session import Base
+
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
     from fastapi.testclient import TestClient
 
     from app.main import create_app
