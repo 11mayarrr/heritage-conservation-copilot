@@ -31,6 +31,11 @@ interface Props {
   grid?: { cols: number; rows: number } | null;
   overlays?: Overlay[];
   maxHeight?: number;
+  /** Click-to-segment: clicks emit prompt points (Shift+click = outside point). */
+  pointMode?: boolean;
+  pointLabel?: 0 | 1;
+  onPoint?: (p: Point, label: 0 | 1) => void;
+  promptPoints?: [number, number, number][];
 }
 
 const colLabel = (i: number) => {
@@ -60,6 +65,10 @@ export function AtlasEditor({
   grid,
   overlays = [],
   maxHeight = 640,
+  pointMode,
+  pointLabel = 1,
+  onPoint,
+  promptPoints = [],
 }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const [boxW, setBoxW] = useState(0);
@@ -111,6 +120,12 @@ export function AtlasEditor({
   };
 
   const handleStageClick = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
+    if (pointMode) {
+      const p = pointer(e);
+      const shift = "shiftKey" in e.evt && e.evt.shiftKey;
+      if (p) onPoint?.(p, shift ? 0 : pointLabel);
+      return;
+    }
     if (drawMode) {
       const p = pointer(e);
       if (!p) return;
@@ -151,7 +166,7 @@ export function AtlasEditor({
           onClick={handleStageClick}
           onTap={handleStageClick}
           onMouseMove={(e) => drawMode && setCursor(pointer(e))}
-          style={{ cursor: drawMode ? "crosshair" : "default" }}
+          style={{ cursor: drawMode || pointMode ? "crosshair" : "default" }}
         >
           <Layer listening>
             {img && <KImage image={img} width={W} height={H} name="bg" />}
@@ -191,6 +206,7 @@ export function AtlasEditor({
                   <Line
                     points={flat(poly)}
                     closed
+                    listening={!pointMode}
                     fill={d.color}
                     opacity={isSel ? 0.38 : r.status === "approved" ? 0.22 : 0.3}
                     onClick={(e) => {
@@ -259,6 +275,12 @@ export function AtlasEditor({
                 ))}
               </Group>
             )}
+            {promptPoints.map(([x, y, lab], i) => (
+              <Group key={`p${i}`} x={x * W} y={y * H} listening={false}>
+                <Circle radius={9} fill={lab ? "#2e7d32" : "#c62828"} stroke="#fff" strokeWidth={2} />
+                <Text text={lab ? "+" : "−"} fontSize={14} fill="#fff" fontStyle="bold" x={-4} y={-7} />
+              </Group>
+            ))}
           </Layer>
         </Stage>
         {drawMode && (
@@ -266,7 +288,10 @@ export function AtlasEditor({
             انقر لإضافة نقاط، ثم انقر على النقطة الأولى لإغلاق المنطقة. Esc للإلغاء.
           </div>
         )}
-        {editable && selected && !drawMode && (
+        {pointMode && (
+          <div className="atlas-hint">انقر داخل المنطقة المتضررة. Shift+نقر لنقطة خارجها تستبعد ما لا يخصها.</div>
+        )}
+        {editable && selected && !drawMode && !pointMode && (
           <div className="atlas-hint">اسحب النقاط لتعديل الحدود، أو اسحب المنطقة لنقلها. نقر مزدوج على نقطة يحذفها.</div>
         )}
       </div>

@@ -187,5 +187,22 @@ export interface Health {
   status: string;
   detector: DetectorInfo;
   original_images_stored: boolean;
+  segmenter: SegmenterInfo;
+  segmenter_fallback_reason: string | null;
   privacy_notice_ar: string;
+}
+
+export interface SegmenterInfo {
+  name: string;
+  kind: "sam2" | "grabcut";
+  description_ar: string;
+}
+
+export interface SegmentPreview {
+  polygon: Point[] | null;
+  area_fraction?: number;
+  other_parts?: number;
+  score: number | null;
+  segmenter: SegmenterInfo;
+  message_ar: string;
 }

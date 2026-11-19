@@ -59,7 +59,7 @@ python scripts/make_synthetic_samples.py   # يكتب sample_data/synthetic/
 ## الاختبارات
 
 ```bash
-python -m pytest -q tests                 # 25 اختبارًا (رؤية، قاعدة معرفة، API، مقاييس، تطابق الألوان)
+python -m pytest -q tests                 # 33 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان)
 HCC_TEST_DATABASE_URL=postgresql+psycopg://hcc:hcc@localhost/hcc python -m pytest -q tests   # على PostgreSQL
 cd frontend && npm test && npm run build
 ```
@@ -74,7 +74,7 @@ cd frontend && npm test && npm run build
 backend/app/
   api/          نقاط FastAPI (walls, inspections, regions, comparisons, knowledge, audit)
   agents/       workflow.py (LangGraph) + rules.py (قواعد الأولوية والكفاية المؤقتة)
-  vision/       quality, detectors/{heuristic,mock,segmentation_model}, registration, change, render
+  vision/       quality, detectors/{heuristic,mock,segmentation_model}, segmenters/{sam2_adapter,grabcut}, registration, change, render
   privacy/      anonymizer.py + ملفات Haar
   rag/          knowledge_base.py (استرجاع مغلق مع المصادر)
   reports/      generator.py + templates/report.html
@@ -95,7 +95,24 @@ tests/
 4. `python scripts/evaluate.py` يقارن ما اقترحه الوكيل (نسخة محفوظة لحظة التحليل) بما اعتمده المختص، ويحسب Precision وRecall وF1 وIoU لكل نوع.
    لا تُعرض أي أرقام دقة في النظام قبل هذا التقييم.
 
-SAM 2 مناسب كأداة يضغط بها المختص على منطقة لتحسين حدودها، وليس لتحديد نوع التلف.
+## أداة التحديد الذكي (SAM 2)
+
+في خريطة التلف، زر **«تحديد ذكي»**: ينقر المختص داخل منطقة التلف (Shift+نقر لنقطة خارجها) فيرسم النظام حدودها،
+ثم يحفظها كمنطقة جديدة بنوع يختاره، أو يطبقها على حدود منطقة موجودة. الأداة ترسم الحدود فقط ولا تحدد نوع التلف،
+وكل استخدام يُسجل في سجل التعديلات مع اسم الأداة.
+
+- **بدون إعداد:** تعمل ببديل OpenCV GrabCut، وهو تقريبي ويظهر تنبيه بذلك في الواجهة.
+- **لتفعيل SAM 2:**
+  ```bash
+  pip install -r requirements-sam2.txt
+  python scripts/download_sam2.py tiny      # يطبع متغيرات البيئة المطلوبة
+  HCC_SEGMENTER=sam2 HCC_SAM2_CHECKPOINT=models/sam2.1_hiera_tiny.pt \
+    HCC_SAM2_CONFIG=configs/sam2.1/sam2.1_hiera_t.yaml uvicorn app.main:app
+  ```
+  أو `HCC_SAM2_MODEL_ID=facebook/sam2.1-hiera-tiny` للتنزيل من Hugging Face.
+
+> المحول (`vision/segmenters/sam2_adapter.py`) مكتوب على واجهة `SAM2ImagePredictor` الرسمية، ومختبر في المشروع بنموذج بديل
+> يحاكيها، لأن أوزان SAM 2 لم يمكن تنزيلها في بيئة التطوير. أول تشغيل حقيقي له يحتاج تأكيدًا على جهاز يملك الأوزان.
 
 ## الافتراضات الحالية
 

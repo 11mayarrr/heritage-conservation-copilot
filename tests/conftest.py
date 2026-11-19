@@ -29,6 +29,9 @@ def client(tmp_path, monkeypatch):
 
     config.get_settings.cache_clear()
     storage._storage = None
+    from app.vision import segmenters
+
+    segmenters.reset_segmenter()
     from app.database.session import init_engine
 
     engine = init_engine()

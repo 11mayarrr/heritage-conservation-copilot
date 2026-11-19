@@ -6,6 +6,7 @@ import type {
   KnowledgeSource,
   Region,
   Retrieval,
+  SegmentPreview,
   Treatment,
   WallSummary,
 } from "./types";
@@ -80,6 +81,9 @@ export const api = {
   reanalyze: (id: string) => request<Inspection>(`/api/inspections/${id}/reanalyze`, { method: "POST" }),
   manualBlur: (id: string, boxes: number[][], reason = "") =>
     request<Inspection>(`/api/inspections/${id}/blur`, { method: "POST", body: json({ boxes, reason }) }),
+
+  segment: (id: string, points: [number, number, number][], box?: number[]) =>
+    request<SegmentPreview>(`/api/inspections/${id}/segment`, { method: "POST", body: json({ points, box: box ?? null }) }),
 
   addRegion: (id: string, body: Partial<Region> & { reason?: string }) =>
     request<Region>(`/api/inspections/${id}/regions`, { method: "POST", body: json(body) }),

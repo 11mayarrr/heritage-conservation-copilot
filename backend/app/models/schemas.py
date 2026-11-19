@@ -96,3 +96,8 @@ class ManualBlur(BaseModel):
 class ComparisonCreate(BaseModel):
     before_id: str
     after_id: str
+
+
+class SegmentRequest(BaseModel):
+    points: list[list[float]] = Field(default_factory=list)  # [[x, y, 1|0], ...] normalized
+    box: list[float] | None = None  # [x0, y0, x1, y1] normalized

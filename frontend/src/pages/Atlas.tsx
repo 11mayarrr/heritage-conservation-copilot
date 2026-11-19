@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, urls } from "../api/client";
-import type { DamageType, Point } from "../api/types";
+import type { DamageType, Point, SegmentPreview } from "../api/types";
 import { AtlasEditor } from "../components/AtlasEditor";
 import { Confidence, DamageLabel, InspectionStatusBadge, Legend, RegionFlags } from "../components/Badges";
 import { InspectionPicker } from "../components/InspectionPicker";
 import { DetectorNotice } from "../components/Notices";
 import { RegionPanel } from "../components/RegionPanel";
+import { SmartSelectPanel } from "../components/SmartSelectPanel";
 import { DAMAGE, DAMAGE_TYPES } from "../lib/constants";
 import { formatDate } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
 
-type Mode = "select" | "draw" | "blur";
+type Mode = "select" | "draw" | "blur" | "smart";
 
 export default function Atlas() {
   const { id } = useParams();
@@ -27,6 +28,12 @@ function AtlasWorkspace({ id }: { id: string }) {
   const [showGrid, setShowGrid] = useState(true);
   const [imgVersion, setImgVersion] = useState(0);
   const [err, setErr] = useState<string | null>(null);
+  const [points, setPoints] = useState<[number, number, number][]>([]);
+  const [pointLabel, setPointLabel] = useState<0 | 1>(1);
+  const [preview, setPreview] = useState<SegmentPreview | null>(null);
+  const [segBusy, setSegBusy] = useState(false);
+  const [segErr, setSegErr] = useState<string | null>(null);
+  const [smartTarget, setSmartTarget] = useState<string | null>(null);
 
   if (error) return <div className="banner danger">{error}</div>;
   if (!insp) return <span className="spinner" />;
@@ -66,6 +73,62 @@ function AtlasWorkspace({ id }: { id: string }) {
     }
   };
 
+  const runSegment = async (pts: [number, number, number][]) => {
+    setPoints(pts);
+    setSegErr(null);
+    if (!pts.some((q) => q[2] === 1)) {
+      setPreview(null);
+      return;
+    }
+    setSegBusy(true);
+    try {
+      setPreview(await api.segment(id, pts));
+    } catch (e) {
+      setSegErr((e as Error).message);
+    } finally {
+      setSegBusy(false);
+    }
+  };
+
+  const resetSmart = () => {
+    setPoints([]);
+    setPreview(null);
+    setSegErr(null);
+  };
+
+  const smartTool = preview?.segmenter.kind === "sam2" ? "SAM 2" : "GrabCut";
+
+  const saveSmartNew = async (type: DamageType) => {
+    if (!preview?.polygon) return;
+    try {
+      const r = await api.addRegion(id, {
+        damage_type: type,
+        polygon: preview.polygon,
+        confidence: 1,
+        reason: `إضافة بالتحديد الذكي (${smartTool})`,
+      });
+      resetSmart();
+      setMode("select");
+      setSelected(r.id);
+      await reload();
+    } catch (e) {
+      setSegErr((e as Error).message);
+    }
+  };
+
+  const applySmart = async (rid: string) => {
+    if (!preview?.polygon) return;
+    try {
+      await api.updateRegion(id, rid, { polygon: preview.polygon, reason: `تحسين الحدود بالتحديد الذكي (${smartTool})` });
+      resetSmart();
+      setMode("select");
+      setSelected(rid);
+      await reload();
+    } catch (e) {
+      setSegErr((e as Error).message);
+    }
+  };
+
   return (
     <>
       <div className="topbar">
@@ -91,6 +154,13 @@ function AtlasWorkspace({ id }: { id: string }) {
                 {DAMAGE_TYPES.map((t) => <option key={t} value={t}>{DAMAGE[t].label}</option>)}
               </select>
             )}
+            <button
+              className={mode === "smart" ? "navy" : ""}
+              onClick={() => { setSmartTarget(selected); setMode("smart"); setSelected(null); resetSmart(); }}
+              title="انقر على منطقة فيرسم النظام حدودها (SAM 2 أو GrabCut)"
+            >
+              تحديد ذكي
+            </button>
             <button className={mode === "blur" ? "navy" : ""} onClick={() => { setMode("blur"); setSelected(null); }}>إخفاء يدوي</button>
             <label style={{ display: "inline-flex", gap: 6, alignItems: "center", margin: 0 }}>
               <input type="checkbox" checked={showGrid} onChange={(e) => setShowGrid(e.target.checked)} style={{ width: "auto" }} /> الشبكة
@@ -108,7 +178,16 @@ function AtlasWorkspace({ id }: { id: string }) {
             onSelect={setSelected}
             editable={mode === "select"}
             onPolygonChange={savePolygon}
-            drawMode={mode !== "select"}
+            drawMode={mode === "draw" || mode === "blur"}
+            pointMode={mode === "smart"}
+            pointLabel={pointLabel}
+            onPoint={(pt, lab) => void runSegment([...points, [pt[0], pt[1], lab]])}
+            promptPoints={mode === "smart" ? points : []}
+            overlays={
+              mode === "smart" && preview?.polygon
+                ? [{ key: "preview", polygon: preview.polygon, color: "#ffffff", dashed: true, fill: 0.25 }]
+                : []
+            }
             drawType={mode === "blur" ? "uncertain" : drawType}
             onDrawComplete={finishDraw}
             onDrawCancel={() => setMode("select")}
@@ -119,7 +198,22 @@ function AtlasWorkspace({ id }: { id: string }) {
         </div>
 
         <div>
-          {region ? (
+          {mode === "smart" ? (
+            <SmartSelectPanel
+              points={points}
+              label={pointLabel}
+              onLabel={setPointLabel}
+              preview={preview}
+              busy={segBusy}
+              error={segErr}
+              regions={insp.regions}
+              initialTarget={smartTarget}
+              onUndo={() => void runSegment(points.slice(0, -1))}
+              onClear={resetSmart}
+              onSaveNew={saveSmartNew}
+              onApply={applySmart}
+            />
+          ) : region ? (
             <RegionPanel
               inspectionId={id}
               region={region}
