@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     knowledge_base_dir: Path = REPO_ROOT / "knowledge_base"
 
-    # Which damage detector to use: "heuristic" (OpenCV, uncalibrated) or "mock".
+    # Which damage detector to use: "heuristic" (OpenCV, uncalibrated), "mock", "synthetic_model" or "model".
     detector: str = "heuristic"
 
     # Regions whose confidence is below this are flagged "low confidence".
@@ -41,6 +41,14 @@ class Settings(BaseSettings):
     # Privacy: the original upload is never written to disk; only the
     # face-anonymized copy is stored.
     face_method: str = "blur"  # "blur" or "pixelate"
+
+    # Click-to-segment tool for the expert: "auto" uses SAM 2 when installed and
+    # configured, otherwise OpenCV GrabCut. "sam2" or "grabcut" force one.
+    segmenter: str = "auto"
+    sam2_checkpoint: str | None = None
+    sam2_config: str = "configs/sam2.1/sam2.1_hiera_t.yaml"
+    sam2_model_id: str | None = None
+    sam2_device: str | None = None
 
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 

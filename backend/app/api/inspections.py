@@ -11,11 +11,13 @@ from app.api.deps import current_user
 from app.database.models import Inspection, Region, Wall
 from app.database.session import get_db
 from app.models.enums import RegionStatus
-from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction
+from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction, SegmentRequest
 from app.reports.generator import atlas_image, build_report
 from app.services import inspections as svc
 from app.services.storage import get_storage
-from app.vision.imageio import ImageDecodeError, encode_png
+from app.vision.geometry import mask_to_polygons, polygon_area
+from app.vision.imageio import ImageDecodeError, decode_image, encode_png
+from app.vision.segmenters import SegmenterUnavailable, get_segmenter, validate_prompts
 
 router = APIRouter(prefix="/api", tags=["inspections"])
 
@@ -139,6 +141,37 @@ def reanalyze(inspection_id: str, db: Session = Depends(get_db), user: str = Dep
 @router.post("/inspections/{inspection_id}/blur")
 def manual_blur(inspection_id: str, body: ManualBlur, db: Session = Depends(get_db), user: str = Depends(current_user)):
     return svc.inspection_out(_guard(svc.apply_manual_blur, db, _insp(db, inspection_id), body.boxes, user, body.reason))
+
+
+@router.post("/inspections/{inspection_id}/segment")
+def segment(inspection_id: str, body: SegmentRequest, db: Session = Depends(get_db)):
+    """Click-to-segment preview (SAM 2 or GrabCut). Nothing is saved: the expert
+    then creates a region or applies the outline to an existing one."""
+    insp = _insp(db, inspection_id)
+    if not insp.image_key:
+        raise HTTPException(404, "لا توجد صورة مقبولة لهذه الحالة.")
+    try:
+        validate_prompts(body.points, body.box)
+        seg = get_segmenter()
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except SegmenterUnavailable as e:
+        raise HTTPException(503, str(e))
+    img = decode_image(get_storage().get(insp.image_key))
+    res = seg.segment(img, body.points, body.box, cache_key=insp.image_key)
+    polys = mask_to_polygons(res.mask, min_area_px=30, epsilon_frac=0.003)
+    if not polys:
+        return {"polygon": None, "segmenter": res.info.__dict__, "score": res.score,
+                "message_ar": "لم يُعثر على منطقة عند النقاط المحددة. جرّب نقطة أخرى داخل المنطقة."}
+    best = max(polys, key=polygon_area)
+    return {
+        "polygon": best,
+        "area_fraction": round(polygon_area(best), 5),
+        "other_parts": len(polys) - 1,
+        "score": res.score,
+        "segmenter": res.info.__dict__,
+        "message_ar": "",
+    }
 
 
 # ------------------------------------------------------------------- regions

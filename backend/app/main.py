@@ -10,6 +10,7 @@ from app.api import audit_log, comparisons, inspections, knowledge, walls
 from app.config import get_settings
 from app.database.session import init_engine
 from app.vision.detectors import get_detector
+from app.vision.segmenters import fallback_reason, get_segmenter
 
 
 @asynccontextmanager
@@ -42,6 +43,8 @@ def create_app() -> FastAPI:
             "status": "ok",
             "detector": info.__dict__,
             "original_images_stored": False,
+            "segmenter": get_segmenter().info.__dict__,
+            "segmenter_fallback_reason": fallback_reason(),
             "privacy_notice_ar": "تُخفى الوجوه آليًا قبل التحليل والتخزين. لا يُستخدم النظام لتتبع الأشخاص أو تحليل سلوك الزوار.",
         }
 

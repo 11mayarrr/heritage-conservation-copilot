@@ -11,3 +11,4 @@ frontend/dist/
 sample_data/synthetic/
 *.log
 .DS_Store
+models/

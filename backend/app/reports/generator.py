@@ -43,6 +43,7 @@ CONF_SOURCE_AR = {
     "mock": "وهمية (عرض)",
     "heuristic_uncalibrated": "تقديرية غير معايرة",
     "model_unvalidated": "نموذج غير مُقيّم",
+    "model_synthetic_only": "نموذج مدرّب على بيانات اصطناعية",
     "expert": "حددها المختص",
 }
 
