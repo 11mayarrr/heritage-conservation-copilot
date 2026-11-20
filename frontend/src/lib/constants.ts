@@ -33,6 +33,7 @@ export const CONFIDENCE_SOURCE: Record<string, string> = {
   mock: "وهمية للعرض",
   heuristic_uncalibrated: "تقديرية غير معايرة",
   model_unvalidated: "نموذج غير مُقيّم",
+  model_synthetic_only: "نموذج مدرّب على بيانات اصطناعية",
   expert: "حددها المختص",
 };
 

@@ -18,3 +18,7 @@ httpx>=0.27
 
 # Optional: trained segmentation model (HCC_DETECTOR=model)
 # ultralytics>=8.2
+
+# Optional: synthetic-trained demo model (HCC_DETECTOR=synthetic_model)
+scikit-learn>=1.4
+joblib>=1.3

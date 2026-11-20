@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     knowledge_base_dir: Path = REPO_ROOT / "knowledge_base"
 
-    # Which damage detector to use: "heuristic" (OpenCV, uncalibrated) or "mock".
+    # Which damage detector to use: "heuristic" (OpenCV, uncalibrated), "mock", "synthetic_model" or "model".
     detector: str = "heuristic"
 
     # Regions whose confidence is below this are flagged "low confidence".

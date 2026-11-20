@@ -63,6 +63,7 @@ class ConfidenceSource(str, Enum):
     MOCK = "mock"
     HEURISTIC = "heuristic_uncalibrated"
     MODEL = "model_unvalidated"
+    MODEL_SYNTHETIC = "model_synthetic_only"  # trained on invented images only
     EXPERT = "expert"
 
 

@@ -59,7 +59,7 @@ python scripts/make_synthetic_samples.py   # يكتب sample_data/synthetic/
 ## الاختبارات
 
 ```bash
-python -m pytest -q tests                 # 33 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان)
+python -m pytest -q tests                 # 35 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان)
 HCC_TEST_DATABASE_URL=postgresql+psycopg://hcc:hcc@localhost/hcc python -m pytest -q tests   # على PostgreSQL
 cd frontend && npm test && npm run build
 ```
@@ -94,6 +94,22 @@ tests/
 3. فعّل النموذج: `HCC_DETECTOR=model HCC_MODEL_WEIGHTS=...` (انظر `vision/detectors/segmentation_model.py`).
 4. `python scripts/evaluate.py` يقارن ما اقترحه الوكيل (نسخة محفوظة لحظة التحليل) بما اعتمده المختص، ويحسب Precision وRecall وF1 وIoU لكل نوع.
    لا تُعرض أي أرقام دقة في النظام قبل هذا التقييم.
+
+## نموذج مدرّب على بيانات اصطناعية (للتجربة فقط)
+
+مسار تدريب وتقييم كامل يعمل دون صور حقيقية، لإثبات أن الكاشف قابل للاستبدال بنموذج مدرب:
+
+```bash
+pip install scikit-learn joblib
+python scripts/train_synthetic.py                 # يولّد 150 صورة اصطناعية بتسميات ويدرّب (≈ نصف دقيقة)
+python scripts/eval_synthetic.py --out docs/synthetic_eval.json   # تقييم على صور اصطناعية محجوزة
+HCC_DETECTOR=synthetic_model python -m uvicorn app.main:app --port 8000
+```
+
+- المولّد (`vision/synthetic.py`) يرسم خمسة أنواع تلف بتسميات دقيقة، والنموذج (`vision/detectors/pixel_model.py`) مصنّف بكسلات (HistGradientBoosting).
+- كل مخرجاته تحمل المصدر **«نموذج مدرّب على بيانات اصطناعية»** وتنبيه صريح في الواجهة والتقرير، ولا تُعد مُتحققة.
+- ⚠️ الأرقام في `docs/synthetic_eval.json` تقيس قدرة النموذج على تقليد المولّد نفسه، **وليست دقة على جدران الطريف**. على صور حقيقية يُتوقع أداء أضعف بكثير، ولا تُعرض هذه الأرقام داخل النظام.
+- الاستبدال بنموذج حقيقي: صدّر التعليقات المعتمدة بـ `scripts/export_annotations.py`، ودرّب بها، وقيّم بـ `scripts/evaluate.py`.
 
 ## أداة التحديد الذكي (SAM 2)
 
