@@ -26,6 +26,8 @@ class Wall(Base):
     code: Mapped[str] = mapped_column(String(64), unique=True, index=True)  # رقم الجدار
     building_name: Mapped[str] = mapped_column(String(200), default="")
     location_note: Mapped[str] = mapped_column(Text, default="")
+    # Per-wall reference grid (services/grids.py). None = use the temporary default.
+    grid: Mapped[dict | None] = mapped_column(JSON, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
     inspections: Mapped[list[Inspection]] = relationship(

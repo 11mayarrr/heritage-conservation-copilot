@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, urls } from "../api/client";
-import type { Inspection } from "../api/types";
+import type { GridInput, Inspection } from "../api/types";
 import { DamageLabel, InspectionStatusBadge } from "../components/Badges";
+import { EMPTY_GRID, GridEditor, GridPreview, gridError, gridSummary, toGridInput } from "../components/GridEditor";
 import { DetectorNotice, PrivacyNotice } from "../components/Notices";
 import { pct } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
@@ -19,6 +20,12 @@ export default function Upload() {
   const [err, setErr] = useState<string | null>(null);
   const [result, setResult] = useState<Inspection | null>(null);
   const [drag, setDrag] = useState(false);
+  const [withGrid, setWithGrid] = useState(true);
+  const [newGrid, setNewGrid] = useState<GridInput>(EMPTY_GRID);
+  const [editGrid, setEditGrid] = useState<GridInput | null>(null);
+  const [applyOpen, setApplyOpen] = useState(true);
+  const [gridMsg, setGridMsg] = useState<string | null>(null);
+  const wall = walls.data?.find((w) => w.id === wallId);
   const input = useRef<HTMLInputElement>(null);
 
   const choose = (f: File | undefined) => {
@@ -32,11 +39,30 @@ export default function Upload() {
   const createWall = async () => {
     setErr(null);
     try {
-      const w = await api.createWall(newCode.trim(), newBuilding.trim());
+      const w = await api.createWall(newCode.trim(), newBuilding.trim(), "", withGrid ? newGrid : null);
       await walls.reload();
       setWallId(w.id);
       setNewCode("");
       setNewBuilding("");
+      setNewGrid(EMPTY_GRID);
+      setEditGrid(null);
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  };
+
+  const saveGrid = async () => {
+    if (!wall || !editGrid) return;
+    setErr(null);
+    setGridMsg(null);
+    try {
+      const out = await api.setWallGrid(wall.id, editGrid, applyOpen, "تعديل الشبكة المرجعية للجدار");
+      await walls.reload();
+      setEditGrid(null);
+      const parts = [`حُفظت الشبكة (الإصدار ${out.grid.version}). الصور الجديدة تُحلل بها.`];
+      if (out.applied_to.length) parts.push(`طُبقت على: ${out.applied_to.join("، ")}.`);
+      if (out.kept_previous_grid.length) parts.push(`بقيت بشبكتها الأصلية لأنها معتمدة: ${out.kept_previous_grid.join("، ")}.`);
+      setGridMsg(parts.join(" "));
     } catch (e) {
       setErr((e as Error).message);
     }
@@ -68,7 +94,7 @@ export default function Upload() {
           <h2>1. الجدار</h2>
           <label>
             اختر الجدار
-            <select value={wallId} onChange={(e) => setWallId(e.target.value)}>
+            <select value={wallId} onChange={(e) => { setWallId(e.target.value); setEditGrid(null); setGridMsg(null); }}>
               <option value="">— اختر —</option>
               {walls.data?.map((w) => (
                 <option key={w.id} value={w.id}>
@@ -83,8 +109,49 @@ export default function Upload() {
               <label>رقم الجدار<input value={newCode} onChange={(e) => setNewCode(e.target.value)} placeholder="مثال: TRF-A12-N" /></label>
               <label>اسم المبنى<input value={newBuilding} onChange={(e) => setNewBuilding(e.target.value)} /></label>
             </div>
-            <button onClick={createWall} disabled={!newCode.trim()}>تسجيل الجدار</button>
+            <label style={{ display: "flex", gap: 6, alignItems: "center", margin: "8px 0" }}>
+              <input type="checkbox" checked={withGrid} onChange={(e) => setWithGrid(e.target.checked)} style={{ width: "auto" }} />
+              <b>شبكة مرجعية خاصة بهذا الجدار</b>
+            </label>
+            {withGrid ? (
+              <GridEditor value={newGrid} onChange={setNewGrid} />
+            ) : (
+              <small className="muted">بدونها تُستخدم الشبكة المؤقتة العامة، ويمكن تحديدها لاحقًا.</small>
+            )}
+            <div style={{ marginTop: 8 }}>
+              <button onClick={createWall} disabled={!newCode.trim() || (withGrid && !!gridError(newGrid))}>تسجيل الجدار</button>
+            </div>
           </details>
+          {wall && (
+            <div className="banner info" style={{ marginTop: 10 }}>
+              <div className="toolbar" style={{ justifyContent: "space-between" }}>
+                <b>الشبكة المرجعية للجدار {wall.code}</b>
+                <span className={`badge ${wall.grid.type === "wall" ? "approved" : "review"}`}>{wall.grid.type === "wall" ? "خاصة بالجدار" : "مؤقتة"}</span>
+              </div>
+              <div>{gridSummary(wall.grid)}{wall.grid.note ? ` · ${wall.grid.note}` : ""}</div>
+              {editGrid ? (
+                <div style={{ marginTop: 8 }}>
+                  <GridEditor value={editGrid} onChange={setEditGrid} />
+                  <label style={{ display: "flex", gap: 6, alignItems: "center", margin: "8px 0" }}>
+                    <input type="checkbox" checked={applyOpen} onChange={(e) => setApplyOpen(e.target.checked)} style={{ width: "auto" }} />
+                    طبّقها أيضًا على صور هذا الجدار غير المعتمدة (المعتمدة تبقى بشبكتها)
+                  </label>
+                  <div className="toolbar">
+                    <button className="primary" disabled={!!gridError(editGrid)} onClick={saveGrid}>حفظ الشبكة</button>
+                    <button onClick={() => setEditGrid(null)}>إلغاء</button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ marginTop: 8 }}>
+                  <GridPreview g={toGridInput(wall.grid)} />
+                  <button style={{ marginTop: 8 }} onClick={() => setEditGrid(toGridInput(wall.grid))}>
+                    {wall.grid.type === "wall" ? "تعديل الشبكة" : "تحديد شبكة لهذا الجدار"}
+                  </button>
+                </div>
+              )}
+              {gridMsg && <div className="banner ok" style={{ marginTop: 8, marginBottom: 0 }}>{gridMsg}</div>}
+            </div>
+          )}
           <h2 style={{ marginTop: 14 }}>2. الصورة</h2>
           <div
             className={`dropzone${drag ? " drag" : ""}`}

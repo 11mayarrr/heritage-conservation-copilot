@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.agents.rules import PRIORITY_RULES_AR
+from app.agents.rules import PRIORITY_RULES_AR, materials_by_location
 from app.database.models import AuditEntry, Inspection
 from app.models.enums import (
     DAMAGE_COLORS,
@@ -96,6 +96,7 @@ def build_report(db: Session, insp: Inspection) -> str:
         priority_rules=PRIORITY_RULES_AR,
         is_approved=insp.status == "approved",
         field_needed=[r for r in data["regions"] if r["needs_field_inspection"]],
+        material_rows=materials_by_location(data["regions"]),
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         approved_status=RegionStatus.APPROVED.value,
     )
