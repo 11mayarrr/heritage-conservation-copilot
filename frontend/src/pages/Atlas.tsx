@@ -5,9 +5,12 @@ import type { DamageType, Point, SegmentPreview } from "../api/types";
 import { AtlasEditor } from "../components/AtlasEditor";
 import { Confidence, DamageLabel, InspectionStatusBadge, Legend, RegionFlags } from "../components/Badges";
 import { InspectionPicker } from "../components/InspectionPicker";
+import { GridOutdatedNotice } from "../components/GridOutdatedNotice";
+import { gridSummary } from "../components/GridEditor";
 import { DetectorNotice } from "../components/Notices";
 import { RegionPanel } from "../components/RegionPanel";
 import { SmartSelectPanel } from "../components/SmartSelectPanel";
+import { StepTracker } from "../components/StepTracker";
 import { DAMAGE, DAMAGE_TYPES } from "../lib/constants";
 import { formatDate } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
@@ -136,12 +139,14 @@ function AtlasWorkspace({ id }: { id: string }) {
           <h1>خريطة التلف — {insp.case_number}</h1>
           <small className="muted">
             جدار {insp.wall.code} {insp.wall.building_name && `· ${insp.wall.building_name}`} · تاريخ التصوير {formatDate(insp.captured_at)} · الشبكة المرجعية{" "}
-            {insp.grid.cols}×{insp.grid.rows} ({insp.grid.type === "temporary" ? "مؤقتة" : insp.grid.type})
+            {gridSummary(insp.grid)}
           </small>
         </div>
         <InspectionStatusBadge status={insp.status} />
       </div>
+      <StepTracker insp={insp} />
       <DetectorNotice detector={insp.analysis?.detector} />
+      <GridOutdatedNotice insp={insp} onApplied={() => void reload()} />
       {err && <div className="banner danger">{err}</div>}
 
       <div className="workspace">
@@ -194,7 +199,12 @@ function AtlasWorkspace({ id }: { id: string }) {
             grid={showGrid ? insp.grid : null}
           />
           <Legend />
-          <small className="muted">الخط المتقطع: تآكل حواف، أو تلف غير مؤكد، أو ثقة منخفضة. تُعرض المساحات نسبةً من الصورة لعدم توفر مرجع قياس.</small>
+          <small className="muted">
+            الخط المتقطع: تآكل حواف، أو تلف غير مؤكد، أو ثقة منخفضة. الأعمدة A، B… من اليسار والصفوف 1، 2… من الأعلى.{" "}
+            {insp.grid.width_m
+              ? "المساحة بالمتر المربع تقديرية من أبعاد الجدار المسجلة، وتصح إذا غطّت الصورة واجهة الجدار كاملة من الأمام."
+              : "تُعرض المساحات نسبةً من الصورة، لأن الجدار بلا أبعاد مسجلة (أضفها في شبكة الجدار من صفحة الرفع)."}
+          </small>
         </div>
 
         <div>

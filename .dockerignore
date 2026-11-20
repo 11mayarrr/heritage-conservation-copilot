@@ -1,0 +1,15 @@
+# Build context for backend/Dockerfile (context: repo root).
+# Keep local databases and stored photos out of the image.
+**/data/
+**/__pycache__/
+**/.pytest_cache/
+.git/
+.github/
+.env
+backend/.env
+frontend/node_modules/
+frontend/dist/
+sample_data/synthetic/
+sample_data/real/
+tests/
+docs/

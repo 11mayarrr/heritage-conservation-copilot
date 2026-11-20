@@ -62,7 +62,7 @@
   <div><b>أعدّه</b>{{ insp.created_by }}</div>
   <div><b>الكاشف</b>{{ detector.name }} ({{ 'مُقيّم' if detector.validated else 'غير مُقيّم' }})</div>
   <div><b>الوجوه المخفية</b>{{ insp.privacy.faces_hidden or 0 }}{% if insp.privacy.manual_boxes %} + {{ insp.privacy.manual_boxes }} يدويًا{% endif %}</div>
-  <div><b>الشبكة المرجعية</b>{{ insp.grid.cols }}×{{ insp.grid.rows }} ({{ 'مؤقتة' if insp.grid.type == 'temporary' else insp.grid.type }})</div>
+  <div><b>الشبكة المرجعية</b>{{ insp.grid.cols }}×{{ insp.grid.rows }} ({{ 'مؤقتة عامة' if insp.grid.type == 'temporary' else 'خاصة بالجدار، الإصدار ' ~ insp.grid.version }}){% if insp.grid.width_m %} · الجدار {{ insp.grid.width_m }}×{{ insp.grid.height_m }} م{% endif %}</div>
 </div>
 
 {% if image_b64 %}
@@ -82,7 +82,7 @@
 
 <h2>جدول أنواع التلف</h2>
 <table>
-  <thead><tr><th>المنطقة</th><th>النوع</th><th>الموقع</th><th>النسبة من الصورة</th><th>الثقة</th><th>الأولوية</th><th>الحالة</th><th>الوصف وملاحظة المختص</th></tr></thead>
+  <thead><tr><th>المنطقة</th><th>النوع</th><th>الموقع</th><th>النسبة من الصورة</th><th>المساحة التقديرية</th><th>الثقة</th><th>الأولوية</th><th>الحالة</th><th>الوصف وملاحظة المختص</th></tr></thead>
   <tbody>
   {% for r in rows %}
   <tr>
@@ -90,16 +90,18 @@
     <td><i class="sw" style="background:{{ r.color }}"></i>{{ r.damage_label_ar }}</td>
     <td>{{ r.grid_cells|join('، ') }}</td>
     <td>{{ '%.2f'|format(r.area_fraction * 100) }}%</td>
+    <td>{% if r.area_m2 is not none %}≈ {{ '%.2f'|format(r.area_m2) }} م²{% else %}—{% endif %}</td>
     <td>{{ '%.0f'|format(r.confidence * 100) }}% <span class="pill {{ 'low' if r.low_confidence else '' }}">{{ conf_source_ar.get(r.confidence_source, r.confidence_source) }}</span></td>
     <td>{{ priority_ar.get(r.priority, r.priority) }}</td>
     <td><span class="pill {{ r.status }}">{{ r.status_label_ar }}</span>{% if r.needs_field_inspection %}<br><span class="pill needs_review">فحص ميداني</span>{% endif %}</td>
     <td>{{ r.description }}{% if r.note %}<br><b>ملاحظة المختص:</b> {{ r.note }}{% endif %}</td>
   </tr>
   {% else %}
-  <tr><td colspan="8">لا توجد مناطق تلف مسجلة. هذا لا يعني خلو الجدار من التلف.</td></tr>
+  <tr><td colspan="9">لا توجد مناطق تلف مسجلة. هذا لا يعني خلو الجدار من التلف.</td></tr>
   {% endfor %}
   </tbody>
 </table>
+{% if insp.grid.width_m %}<p class="note">المساحة التقديرية بالمتر المربع = النسبة من الصورة × أبعاد الجدار المسجلة ({{ insp.grid.width_m }}×{{ insp.grid.height_m }} م). تصح فقط إذا كانت الصورة تغطي واجهة الجدار كاملة ومأخوذة من الأمام تقريبًا.</p>{% else %}<p class="note">لا توجد أبعاد مسجلة لهذا الجدار، لذلك لا تُحسب المساحة بالمتر المربع.</p>{% endif %}
 
 <h2>المعالجات المقترحة والمواد والأدوات</h2>
 <table>
@@ -109,7 +111,7 @@
   <tr>
     <td>R{{ r.index }}</td>
     {% if r.treatment %}
-    <td><b>{{ r.treatment.title_ar }}</b><br>{{ r.treatment.usage_ar }}<br><span class="pill">{{ r.treatment.approval_label_ar }}</span>
+    <td><b>{{ r.treatment.title_ar }}</b><br><span class="src">رمز المعالجة: {{ r.treatment.id }}</span><br>{{ r.treatment.usage_ar }}<br><span class="pill">{{ r.treatment.approval_label_ar }}</span>
       {% for c in r.treatment.cautions_ar %}<br>⚠ {{ c }}{% endfor %}</td>
     <td>{{ r.materials|join('، ') }}</td>
     <td>{{ r.tools|join('، ') }}</td>
@@ -121,6 +123,18 @@
   {% endfor %}
   </tbody>
 </table>
+
+<h2>قائمة المواد والأدوات مرتبطة بمواقع التلف</h2>
+{% if material_rows %}
+<table>
+  <thead><tr><th>النوع</th><th>المادة / الأداة</th><th>المناطق</th><th>المواقع على الواجهة (الشبكة)</th></tr></thead>
+  <tbody>
+  {% for m in material_rows %}
+  <tr><td>{{ 'مادة' if m.kind == 'material' else 'أداة' }}</td><td>{{ m.name }}</td><td>{{ m.regions|join('، ') }}</td><td>{{ m.cells|join('، ') }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>لا توجد مواد أو أدوات مرتبطة بعد.</p>{% endif %}
 
 {% if field_needed %}
 <h2>توصية بالفحص الميداني</h2>

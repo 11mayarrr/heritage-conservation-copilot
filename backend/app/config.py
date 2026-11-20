@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Regions whose confidence is below this are flagged "low confidence".
     low_confidence_threshold: float = 0.5
 
-    # Reference grid laid over each wall photo (temporary until an official grid exists).
+    # Default reference grid for walls without their own grid (see services/grids.py).
     grid_cols: int = 6
     grid_rows: int = 4
 
