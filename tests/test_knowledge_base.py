@@ -12,14 +12,35 @@ def kb():
     return KnowledgeBase(get_settings().knowledge_base_dir)
 
 
-def test_every_entry_has_a_real_source_with_locator_and_quote(kb):
+def test_every_entry_has_a_real_source_with_locator_and_support(kb):
     assert kb.entries
-    read_sources = {s["url"] for s in kb.sources_index if s.get("status") == "read"}
+    index = {s["url"]: s for s in kb.sources_index}
     for e in kb.entries:
         assert e.sources
         for s in e.sources:
-            assert s.title and s.publisher and s.locator and s.quote
-            assert s.url in read_sources, f"{e.id} cites a source not marked as read"
+            assert s.title and s.publisher and s.locator
+            record = index.get(s.url)
+            assert record and record.get("status") == "read", f"{e.id} cites a source not marked as read"
+            if record.get("quote_policy") == "summary_only":
+                # copyrighted source: Arabic paraphrase + locator, never copied text
+                assert s.summary_ar and not s.quote, f"{e.id}: summary_only source needs summary_ar and no quote"
+            else:
+                assert s.quote, f"{e.id}: public-domain source needs a verbatim quote"
+
+
+def test_atturaif_entries_are_site_specific_and_unapproved(kb):
+    site = [e for e in kb.entries if e.id.startswith("atturaif-")]
+    assert len(site) >= 7
+    for e in site:
+        assert e.approval == "demo_unapproved"
+        assert all("unesco" in s.url for s in e.sources)
+        assert e.cautions_ar, f"{e.id}: needs cautions"
+        # the review panel splits materials/tools on commas, so list items must not contain any
+        for item in [*e.materials, *e.tools]:
+            assert "،" not in item and "," not in item, f"{e.id}: comma inside '{item}'"
+    # every damage type except 'uncertain' has a site-specific option
+    covered = {dt for e in site for dt in e.damage_types}
+    assert covered >= {t.value for t in DamageType if t is not DamageType.UNCERTAIN}
 
 
 def test_retrieval_is_closed_and_type_filtered(kb):
