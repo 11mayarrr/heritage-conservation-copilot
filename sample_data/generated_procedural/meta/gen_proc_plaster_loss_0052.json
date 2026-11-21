@@ -1,0 +1,17 @@
+{
+ "source": "generated",
+ "name": "gen_proc_plaster_loss_0052",
+ "generated_by": "procedural-code: backend/app/vision/synthetic.py make_labeled_varied",
+ "date": "2026-11-21T05:11:43+00:00",
+ "seed": 200051,
+ "seed_used": 200051000,
+ "prompt": null,
+ "focus_damage_type": "plaster_loss",
+ "label_ids_present": [
+  1,
+  2
+ ],
+ "split": "train",
+ "expert_review": "none: drawn by code, nothing to review for realism",
+ "note": "Drawn by code. Not a real wall. Do not report scores on it as accuracy on At-Turaif."
+}

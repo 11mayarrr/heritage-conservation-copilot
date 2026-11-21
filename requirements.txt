@@ -10,6 +10,8 @@ psycopg[binary]>=3.1
 opencv-python-headless>=4.10,<5
 numpy>=1.26
 Jinja2>=3.1
+# Excel export of approved inspections (GeoJSON needs no extra package).
+openpyxl>=3.1
 langgraph>=0.2
 
 # Tests
@@ -18,3 +20,7 @@ httpx>=0.27
 
 # Optional: trained segmentation model (HCC_DETECTOR=model)
 # ultralytics>=8.2
+
+# Optional: synthetic-trained demo model (HCC_DETECTOR=synthetic_model)
+scikit-learn>=1.4
+joblib>=1.3

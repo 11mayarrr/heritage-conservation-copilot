@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -8,6 +9,22 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 sys.path.insert(0, str(ROOT / "scripts"))
+
+
+PASSWORD = "test-pass-1234"
+
+
+def _make_accounts() -> None:
+    """Two test accounts: sara (specialist, signed in by the `client` fixture) and huda (assistant)."""
+    from app.database.session import get_db
+    from app.services import accounts
+
+    db = next(get_db())
+    try:
+        accounts.create_user(db, username="sara", display_name="م. سارة", role="specialist", password=PASSWORD)
+        accounts.create_user(db, username="huda", display_name="هدى", role="assistant", password=PASSWORD)
+    finally:
+        db.close()
 
 
 @pytest.fixture(scope="session")
@@ -19,7 +36,8 @@ def samples(tmp_path_factory) -> Path:
 
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
-    monkeypatch.setenv("HCC_DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
+    pg = os.environ.get("HCC_TEST_DATABASE_URL")  # e.g. postgresql+psycopg://hcc:hcc@localhost/hcc
+    monkeypatch.setenv("HCC_DATABASE_URL", pg or f"sqlite:///{tmp_path / 'test.db'}")
     monkeypatch.setenv("HCC_STORAGE_DIR", str(tmp_path / "storage"))
     monkeypatch.setenv("HCC_DETECTOR", "heuristic")
     from app import config
@@ -27,14 +45,25 @@ def client(tmp_path, monkeypatch):
 
     config.get_settings.cache_clear()
     storage._storage = None
+    from app.vision import segmenters
+
+    segmenters.reset_segmenter()
     from app.database.session import init_engine
 
-    init_engine()
+    engine = init_engine()
+    if pg:
+        from app.database.session import Base
+
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
     from fastapi.testclient import TestClient
 
     from app.main import create_app
 
     with TestClient(create_app()) as c:
+        _make_accounts()
+        r = c.post("/api/auth/login", json={"username": "sara", "password": PASSWORD})
+        assert r.status_code == 200, r.text  # every test below starts signed in as a specialist
         yield c
     config.get_settings.cache_clear()
     storage._storage = None

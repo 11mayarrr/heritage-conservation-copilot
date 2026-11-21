@@ -25,6 +25,8 @@ from app.privacy.anonymizer import apply_manual_boxes
 from app.rag.knowledge_base import get_kb
 from app.services import audit
 from app.services.storage import get_storage
+from app.agents.rules import materials_by_location
+from app.services import grids
 from app.vision.geometry import grid_cells, polygon_area, validate_polygon
 from app.vision.imageio import decode_image, encode_jpeg
 
@@ -66,8 +68,7 @@ def create_inspection(
     db: Session, wall: Wall, image_bytes: bytes, user: str, captured_at: datetime | None = None
 ) -> Inspection:
     img = decode_image(image_bytes)
-    state = run_inspection(img)
-    s = get_settings()
+    state = run_inspection(img, grids.wall_grid(wall))
 
     insp = Inspection(
         case_number=next_case_number(db),
@@ -79,7 +80,7 @@ def create_inspection(
         height=img.shape[0],
         quality=state.get("quality", {}),
         privacy=state.get("privacy", {}),
-        grid=state.get("grid", {"cols": s.grid_cols, "rows": s.grid_rows, "type": "temporary"}),
+        grid=state.get("grid") or grids.wall_grid(wall),
         analysis={
             "detector": state.get("detector"),
             "sufficiency": state.get("sufficiency"),
@@ -131,7 +132,7 @@ def create_inspection(
 
 
 # --------------------------------------------------------------------- serialize
-def region_out(r: Region) -> dict:
+def region_out(r: Region, grid: dict | None = None) -> dict:
     s = get_settings()
     dt = DamageType(r.damage_type)
     return {
@@ -145,6 +146,8 @@ def region_out(r: Region) -> dict:
         "confidence_source": r.confidence_source,
         "low_confidence": r.confidence < s.low_confidence_threshold,
         "area_fraction": r.area_fraction,
+        # Estimated m^2, only when the wall grid has real dimensions.
+        "area_m2": grids.area_m2(r.area_fraction, grid if grid is not None else r.inspection.grid),
         "grid_cells": r.grid_cells,
         "description": r.description,
         "priority": r.priority,
@@ -165,7 +168,8 @@ def inspection_out(insp: Inspection, include_rejected: bool = False) -> dict:
     return {
         "id": insp.id,
         "case_number": insp.case_number,
-        "wall": {"id": insp.wall.id, "code": insp.wall.code, "building_name": insp.wall.building_name},
+        "wall": {"id": insp.wall.id, "code": insp.wall.code, "building_name": insp.wall.building_name,
+                 "grid": grids.wall_grid(insp.wall)},
         "captured_at": insp.captured_at.isoformat() if insp.captured_at else None,
         "created_at": insp.created_at.isoformat() if insp.created_at else None,
         "created_by": insp.created_by,
@@ -180,7 +184,9 @@ def inspection_out(insp: Inspection, include_rejected: bool = False) -> dict:
         "expert_notes": insp.expert_notes,
         "approved_by": insp.approved_by,
         "approved_at": insp.approved_at.isoformat() if insp.approved_at else None,
-        "regions": [region_out(r) for r in regions],
+        "regions": (regs := [region_out(r, insp.grid) for r in regions]),
+        # Step 6 of the action map: each material/tool with the regions and grid cells it is used in.
+        "materials_by_location": materials_by_location(regs),
         "summary": summarize(regions),
     }
 
@@ -236,7 +242,7 @@ def add_region(db: Session, insp: Inspection, data: dict, user: str) -> Region:
         confidence=data.get("confidence", 1.0),
         confidence_source=ConfidenceSource.EXPERT.value,
         area_fraction=round(area, 5),
-        grid_cells=grid_cells(poly, insp.grid.get("cols", s.grid_cols), insp.grid.get("rows", s.grid_rows)),
+        grid_cells=grid_cells(poly, *grids.dims(insp.grid)),
         description=data.get("description", ""),
         priority=data.get("priority", priority_for(dt, area).value),
         status=RegionStatus.EDITED.value,
@@ -294,7 +300,7 @@ def update_region(db: Session, region: Region, changes: dict, user: str) -> Regi
     # Re-analysis of derived fields after an edit (workflow step 14).
     if "polygon" in changes and changes["polygon"] is not None:
         region.area_fraction = round(polygon_area(region.polygon), 5)
-        region.grid_cells = grid_cells(region.polygon, insp.grid.get("cols", s.grid_cols), insp.grid.get("rows", s.grid_rows))
+        region.grid_cells = grid_cells(region.polygon, *grids.dims(insp.grid))
     if changes.get("damage_type") and "treatment_id" not in changes:
         tid, mats, tools = _default_treatment(region.damage_type, region.description)
         audit.record(db, user="agent", entity="region", entity_id=region.id, inspection_id=insp.id,
@@ -405,7 +411,7 @@ def reanalyze(db: Session, insp: Inspection, user: str) -> Inspection:
         if r.status == RegionStatus.REJECTED.value:
             continue
         r.area_fraction = round(polygon_area(r.polygon), 5)
-        r.grid_cells = grid_cells(r.polygon, insp.grid.get("cols", s.grid_cols), insp.grid.get("rows", s.grid_rows))
+        r.grid_cells = grid_cells(r.polygon, *grids.dims(insp.grid))
         if not r.treatment_id:
             tid, mats, tools = _default_treatment(r.damage_type, r.description)
             if tid:
@@ -431,3 +437,21 @@ def apply_manual_blur(db: Session, insp: Inspection, boxes: list[list[float]], u
                  action="manual_blur", new={"boxes": len(boxes)}, reason=reason)
     db.commit()
     return insp
+
+
+def apply_grid(db: Session, insp: Inspection, grid: dict, user: str, reason: str = "") -> bool:
+    """Re-map an inspection onto a new wall grid (grid cells only; polygons,
+    types and expert input are untouched). Approved inspections are skipped:
+    their documented locations stay as approved. Returns True if applied."""
+    if insp.status in (InspectionStatus.APPROVED.value, InspectionStatus.REJECTED_QUALITY.value):
+        return False
+    old = dict(insp.grid or {})
+    insp.grid = dict(grid)
+    cols, rows = grids.dims(grid)
+    for r in insp.regions:
+        if r.status != RegionStatus.REJECTED.value:
+            r.grid_cells = grid_cells(r.polygon, cols, rows)
+    audit.record(db, user=user, entity="inspection", entity_id=insp.id, inspection_id=insp.id,
+                 action="update", field="grid", old=old, new=dict(grid),
+                 reason=reason or "تطبيق الشبكة المرجعية الجديدة للجدار")
+    return True

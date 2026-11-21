@@ -10,13 +10,15 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.agents.rules import PRIORITY_RULES_AR
+from app.agents.rules import PRIORITY_RULES_AR, materials_by_location
 from app.database.models import AuditEntry, Inspection
 from app.models.enums import (
+    CONF_SOURCE_AR,
     DAMAGE_COLORS,
     DAMAGE_LABELS_AR,
     INSUFFICIENT_INFO_AR,
     PRELIMINARY_WARNING_AR,
+    PRIORITY_AR,
     DamageType,
     RegionStatus,
 )
@@ -37,13 +39,6 @@ STATUS_AR = {
     "approved": "معتمدة",
     "returned": "أعيدت للمراجعة",
     "rejected_quality": "مرفوضة لجودة الصورة",
-}
-PRIORITY_AR = {"high": "عالية", "medium": "متوسطة", "low": "منخفضة"}
-CONF_SOURCE_AR = {
-    "mock": "وهمية (عرض)",
-    "heuristic_uncalibrated": "تقديرية غير معايرة",
-    "model_unvalidated": "نموذج غير مُقيّم",
-    "expert": "حددها المختص",
 }
 
 
@@ -96,6 +91,7 @@ def build_report(db: Session, insp: Inspection) -> str:
         priority_rules=PRIORITY_RULES_AR,
         is_approved=insp.status == "approved",
         field_needed=[r for r in data["regions"] if r["needs_field_inspection"]],
+        material_rows=materials_by_location(data["regions"]),
         generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         approved_status=RegionStatus.APPROVED.value,
     )

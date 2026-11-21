@@ -18,4 +18,8 @@ def get_detector(name: str | None = None) -> DamageDetector:
         from app.vision.detectors.segmentation_model import YoloSegDetector
 
         return YoloSegDetector()
+    if name == "synthetic_model":
+        from app.vision.detectors.pixel_model import SyntheticPixelDetector
+
+        return SyntheticPixelDetector()
     raise ValueError(f"unknown detector: {name}")

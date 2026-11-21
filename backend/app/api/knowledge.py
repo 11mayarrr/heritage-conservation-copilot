@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from fastapi import APIRouter, HTTPException, Query
 
+from app.config import get_settings
 from app.models.enums import DAMAGE_COLORS, DAMAGE_LABELS_AR, DamageType
 from app.rag.knowledge_base import get_kb
 
@@ -22,6 +26,16 @@ def retrieve(damage_type: DamageType, context: str = Query(default="", max_lengt
 @router.get("/damage-types")
 def damage_types():
     return [{"id": t.value, "label_ar": DAMAGE_LABELS_AR[t], "color": DAMAGE_COLORS[t]} for t in DamageType]
+
+
+@router.get("/glossary")
+def glossary():
+    """Damage glossary (an input in the challenge action map). Draft until replaced
+    by the conservation authority's approved glossary."""
+    path = Path(get_settings().knowledge_base_dir) / "damage_glossary.json"
+    if not path.exists():
+        return {"status": "missing", "note_ar": "لا يوجد مسرد تلف بعد.", "terms": []}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @router.get("/{treatment_id}")

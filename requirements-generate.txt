@@ -1,0 +1,3 @@
+# Only for scripts/generate_ai_dataset.py (task C4). Not needed to run the app or the tests.
+google-genai
+Pillow

@@ -103,7 +103,7 @@ class HeuristicDetector:
             score = round(min(MAX_CONF, score), 2)
             # One editable outline per crack: the grouped band around its fragments.
             mask = (glabels == g).astype(np.uint8)
-            for poly in mask_to_polygons(mask, min_area_px=40):
+            for poly in mask_to_polygons(mask, min_area_px=40, epsilon_frac=0.008):
                 out.append(
                     Detection(
                         damage_type=DamageType.CRACK,

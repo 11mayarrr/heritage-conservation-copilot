@@ -31,7 +31,22 @@ def init_engine(url: str | None = None):
     from app.database import models  # noqa: F401  (register tables)
 
     Base.metadata.create_all(_engine)
+    _add_missing_columns(_engine)
     return _engine
+
+
+def _add_missing_columns(engine) -> None:
+    """create_all() never alters existing tables. Add columns introduced after a
+    database was first created, so older local databases keep working."""
+    from sqlalchemy import inspect, text
+
+    insp = inspect(engine)
+    if "walls" in insp.get_table_names():
+        cols = {c["name"] for c in insp.get_columns("walls")}
+        if "grid" not in cols:
+            col_type = "JSONB" if engine.dialect.name == "postgresql" else "JSON"
+            with engine.begin() as conn:
+                conn.execute(text(f"ALTER TABLE walls ADD COLUMN grid {col_type}"))
 
 
 def get_db() -> Iterator[Session]:

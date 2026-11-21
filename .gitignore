@@ -9,5 +9,10 @@ export/
 node_modules/
 frontend/dist/
 sample_data/synthetic/
+sample_data/generated/
 *.log
 .DS_Store
+models/
+*.tsbuildinfo
+sample_data/generated/
+sample_data/generated_procedural/

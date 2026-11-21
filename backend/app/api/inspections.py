@@ -7,15 +7,21 @@ from fastapi.responses import HTMLResponse, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import current_user
-from app.database.models import Inspection, Region, Wall
+from app.api.deps import current_user, require_specialist
+from app.database.models import AuditEntry, Inspection, Region, Wall
 from app.database.session import get_db
 from app.models.enums import RegionStatus
-from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction
+from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction, SegmentRequest
+from app.rag.knowledge_base import get_kb
 from app.reports.generator import atlas_image, build_report
+from app.services import export as exporter
+from app.services import grids
 from app.services import inspections as svc
+from app.services.audit import serialize as serialize_audit
 from app.services.storage import get_storage
-from app.vision.imageio import ImageDecodeError, encode_png
+from app.vision.geometry import mask_to_polygons, polygon_area
+from app.vision.imageio import ImageDecodeError, decode_image, encode_png
+from app.vision.segmenters import SegmenterUnavailable, get_segmenter, validate_prompts
 
 router = APIRouter(prefix="/api", tags=["inspections"])
 
@@ -115,6 +121,59 @@ def report(inspection_id: str, download: bool = False, db: Session = Depends(get
     return HTMLResponse(html, headers=headers)
 
 
+def _export_inputs(insp: Inspection) -> tuple[dict, dict[str, dict]]:
+    """The inspection as served by the API plus the treatments its regions use."""
+    data = svc.inspection_out(insp)
+    kb = get_kb()
+    treatments: dict[str, dict] = {}
+    for r in data["regions"]:
+        tid = r["treatment_id"]
+        if tid and tid not in treatments:
+            t = kb.get(tid)
+            if t:
+                treatments[tid] = t.to_dict()
+    return data, treatments
+
+
+@router.get("/inspections/{inspection_id}/export.xlsx")
+def export_xlsx(inspection_id: str, db: Session = Depends(get_db)):
+    """Excel workbook (case summary, regions, audit log). Approved inspections only."""
+    insp = _insp(db, inspection_id)
+    data, treatments = _export_inputs(insp)
+    audit_rows = [
+        serialize_audit(e)
+        for e in db.scalars(
+            select(AuditEntry).where(AuditEntry.inspection_id == insp.id).order_by(AuditEntry.at, AuditEntry.id)
+        )
+    ]
+    try:
+        content = exporter.build_xlsx(data, audit_rows, treatments)
+    except exporter.NotApproved as e:
+        raise HTTPException(409, str(e))
+    return Response(
+        content,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{insp.case_number}-damage-table.xlsx"'},
+    )
+
+
+@router.get("/inspections/{inspection_id}/export.geojson")
+def export_geojson(inspection_id: str, db: Session = Depends(get_db)):
+    """GeoJSON of the damage regions in local wall-image coordinates (not geographic).
+    Approved inspections only."""
+    insp = _insp(db, inspection_id)
+    data, treatments = _export_inputs(insp)
+    try:
+        obj = exporter.build_geojson(data, treatments)
+    except exporter.NotApproved as e:
+        raise HTTPException(409, str(e))
+    return Response(
+        exporter.geojson_text(obj),
+        media_type="application/geo+json",
+        headers={"Content-Disposition": f'attachment; filename="{insp.case_number}-regions.geojson"'},
+    )
+
+
 @router.put("/inspections/{inspection_id}/notes")
 def set_notes(inspection_id: str, body: InspectionNotes, db: Session = Depends(get_db), user: str = Depends(current_user)):
     insp = svc.update_notes(db, _insp(db, inspection_id), body.expert_notes, user, body.reason)
@@ -122,7 +181,7 @@ def set_notes(inspection_id: str, body: InspectionNotes, db: Session = Depends(g
 
 
 @router.post("/inspections/{inspection_id}/approve")
-def approve(inspection_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(current_user)):
+def approve(inspection_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(require_specialist)):
     return svc.inspection_out(_guard(svc.approve_inspection, db, _insp(db, inspection_id), user, body.reason))
 
 
@@ -136,9 +195,51 @@ def reanalyze(inspection_id: str, db: Session = Depends(get_db), user: str = Dep
     return svc.inspection_out(_guard(svc.reanalyze, db, _insp(db, inspection_id), user))
 
 
+@router.post("/inspections/{inspection_id}/apply-wall-grid")
+def apply_wall_grid(inspection_id: str, db: Session = Depends(get_db), user: str = Depends(current_user)):
+    """Re-map this case onto its wall's current reference grid (not for approved cases)."""
+    insp = _insp(db, inspection_id)
+    if not svc.apply_grid(db, insp, grids.wall_grid(insp.wall), user, "تطبيق شبكة الجدار الحالية على الحالة"):
+        raise HTTPException(409, "الحالة معتمدة أو مرفوضة الجودة، فتبقى بشبكتها الأصلية. أعدها للمراجعة أولًا.")
+    db.commit()
+    db.refresh(insp)
+    return svc.inspection_out(insp)
+
+
 @router.post("/inspections/{inspection_id}/blur")
 def manual_blur(inspection_id: str, body: ManualBlur, db: Session = Depends(get_db), user: str = Depends(current_user)):
     return svc.inspection_out(_guard(svc.apply_manual_blur, db, _insp(db, inspection_id), body.boxes, user, body.reason))
+
+
+@router.post("/inspections/{inspection_id}/segment")
+def segment(inspection_id: str, body: SegmentRequest, db: Session = Depends(get_db)):
+    """Click-to-segment preview (SAM 2 or GrabCut). Nothing is saved: the expert
+    then creates a region or applies the outline to an existing one."""
+    insp = _insp(db, inspection_id)
+    if not insp.image_key:
+        raise HTTPException(404, "لا توجد صورة مقبولة لهذه الحالة.")
+    try:
+        validate_prompts(body.points, body.box)
+        seg = get_segmenter()
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    except SegmenterUnavailable as e:
+        raise HTTPException(503, str(e))
+    img = decode_image(get_storage().get(insp.image_key))
+    res = seg.segment(img, body.points, body.box, cache_key=insp.image_key)
+    polys = mask_to_polygons(res.mask, min_area_px=30, epsilon_frac=0.003)
+    if not polys:
+        return {"polygon": None, "segmenter": res.info.__dict__, "score": res.score,
+                "message_ar": "لم يُعثر على منطقة عند النقاط المحددة. جرّب نقطة أخرى داخل المنطقة."}
+    best = max(polys, key=polygon_area)
+    return {
+        "polygon": best,
+        "area_fraction": round(polygon_area(best), 5),
+        "other_parts": len(polys) - 1,
+        "score": res.score,
+        "segmenter": res.info.__dict__,
+        "message_ar": "",
+    }
 
 
 # ------------------------------------------------------------------- regions
@@ -162,7 +263,7 @@ def delete_region(inspection_id: str, region_id: str, reason: str = "", db: Sess
 
 
 @router.post("/inspections/{inspection_id}/regions/{region_id}/approve")
-def approve_region(inspection_id: str, region_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(current_user)):
+def approve_region(inspection_id: str, region_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(require_specialist)):
     r = _guard(svc.set_region_status, db, _region(db, inspection_id, region_id), RegionStatus.APPROVED, user, body.reason)
     return svc.region_out(r)
 
