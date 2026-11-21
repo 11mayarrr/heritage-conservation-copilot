@@ -44,7 +44,11 @@ class Source:
     year: str
     locator: str  # page or section inside the source
     url: str = ""
-    quote: str = ""  # short verbatim excerpt supporting the entry
+    quote: str = ""  # short verbatim excerpt supporting the entry (public-domain sources)
+    # Arabic paraphrase of what the source says at `locator`. Used instead of a
+    # verbatim quote for sources whose copyright status does not allow copying
+    # text (see `quote_policy` in sources.json).
+    summary_ar: str = ""
 
 
 @dataclass

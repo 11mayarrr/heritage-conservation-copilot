@@ -190,7 +190,8 @@ HCC_DETECTOR=synthetic_model python -m uvicorn app.main:app --port 8000
 
 ## المصادر المستخدمة
 
-- U.S. National Park Service, *Preservation Brief 5: Preservation of Historic Adobe Buildings* (Tiller & Look, 1978) — المصدر الوحيد الذي بُنيت عليه المعالجات.
+- U.S. National Park Service, *Preservation Brief 5: Preservation of Historic Adobe Buildings* (Tiller & Look, 1978) — مصدر عام (ملك عام) بُنيت عليه 8 معالجات.
+- Lord Cultural Resources, *Atturaif Living Museum Conservation Manual* (2008)، الملحق A من ملف ترشيح حي الطريف، وثيقة اليونسكو 168965 (<https://whc.unesco.org/document/168965>) — بُنيت عليه 7 معالجات خاصة بالطريف، بتلخيص عربي ورقم القسم (مصدر محمي بحقوق النشر، قُرئ عبر أداة آلية ولم يراجعه مختص).
 - مدرجة لكن **غير مقروءة** ولا يُستشهد بها: Getty Conservation Institute, *Terra Literature Review* (2008)؛ ICOMOS-ISCS, *Illustrated glossary on stone deterioration patterns*.
 
 ## لقطات (على صور اصطناعية)
