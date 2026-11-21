@@ -1,0 +1,18 @@
+{
+ "source": "generated",
+ "generated_by": "procedural-code: backend/app/vision/synthetic.py make_labeled_varied",
+ "date": "2026-11-21T05:11:43+00:00",
+ "images": 1000,
+ "per_focus_type": {
+  "crack": 200,
+  "plaster_loss": 200,
+  "moisture_erosion": 200,
+  "material_loss": 200,
+  "edge_erosion": 200
+ },
+ "by_split": {
+  "train": 800,
+  "test": 200
+ },
+ "note": "Drawn by code. Not a real wall. Do not report scores on it as accuracy on At-Turaif."
+}
