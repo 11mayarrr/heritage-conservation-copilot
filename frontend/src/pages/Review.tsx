@@ -4,7 +4,9 @@ import { api } from "../api/client";
 import type { RegionStatus } from "../api/types";
 import { Confidence, DamageLabel, InspectionStatusBadge, RegionFlags } from "../components/Badges";
 import { InspectionPicker } from "../components/InspectionPicker";
+import { GridOutdatedNotice } from "../components/GridOutdatedNotice";
 import { DetectorNotice } from "../components/Notices";
+import { StepTracker } from "../components/StepTracker";
 import { PRIORITY, REGION_STATUS } from "../lib/constants";
 import { formatDate, pct } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
@@ -35,6 +37,7 @@ function ReviewWorkspace({ id }: { id: string }) {
 
   if (error) return <div className="banner danger">{error}</div>;
   if (!insp) return <span className="spinner" />;
+  const hasM2 = insp.regions.some((r) => r.area_m2 != null);
 
   const run = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -69,7 +72,9 @@ function ReviewWorkspace({ id }: { id: string }) {
         </div>
         <InspectionStatusBadge status={insp.status} />
       </div>
+      <StepTracker insp={insp} />
       <DetectorNotice detector={insp.analysis?.detector} />
+      <GridOutdatedNotice insp={insp} onApplied={() => void reload()} />
       {insp.status === "approved" && (
         <div className="banner ok">اعتمدها {insp.approved_by} في {formatDate(insp.approved_at, true)}. أي تعديل لاحق يلغي الاعتماد تلقائيًا.</div>
       )}
@@ -86,7 +91,7 @@ function ReviewWorkspace({ id }: { id: string }) {
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>المنطقة</th><th>النوع</th><th>الموقع</th><th>النسبة</th><th>الثقة</th><th>الأولوية</th><th>الحالة</th><th>ملاحظة</th><th></th></tr>
+              <tr><th>المنطقة</th><th>النوع</th><th>الموقع</th><th>النسبة</th>{hasM2 && <th>م² تقديري</th>}<th>الثقة</th><th>الأولوية</th><th>الحالة</th><th>ملاحظة</th><th></th></tr>
             </thead>
             <tbody>
               {rows.map((r) => (
@@ -95,6 +100,7 @@ function ReviewWorkspace({ id }: { id: string }) {
                   <td><DamageLabel type={r.damage_type} /></td>
                   <td>{r.grid_cells.join("، ")}</td>
                   <td>{pct(r.area_fraction, 2)}</td>
+                  {hasM2 && <td>{r.area_m2 != null ? `≈ ${r.area_m2.toFixed(2)}` : "—"}</td>}
                   <td><Confidence value={r.confidence} source={r.confidence_source} /></td>
                   <td>{PRIORITY[r.priority]}</td>
                   <td><RegionFlags r={r} /></td>
@@ -109,7 +115,7 @@ function ReviewWorkspace({ id }: { id: string }) {
                   </td>
                 </tr>
               ))}
-              {rows.length === 0 && <tr><td colSpan={9} className="empty">لا توجد مناطق في هذا التصنيف.</td></tr>}
+              {rows.length === 0 && <tr><td colSpan={hasM2 ? 10 : 9} className="empty">لا توجد مناطق في هذا التصنيف.</td></tr>}
             </tbody>
           </table>
         </div>

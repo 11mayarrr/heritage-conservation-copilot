@@ -23,6 +23,7 @@ from app.config import get_settings
 from app.privacy.anonymizer import anonymize
 from app.rag.knowledge_base import get_kb
 from app.vision.detectors import get_detector
+from app.services.grids import default_grid, dims
 from app.vision.geometry import grid_cells, polygon_area
 from app.vision.quality import assess_quality
 
@@ -90,6 +91,8 @@ def detect_damage(state: InspectionState) -> dict[str, Any]:
 
 def score_confidence(state: InspectionState) -> dict[str, Any]:
     s = get_settings()
+    grid = state.get("grid") or default_grid()
+    cols, rows = dims(grid)
     out = []
     for d in state["detections"]:
         area = polygon_area(d["polygon"])
@@ -97,7 +100,7 @@ def score_confidence(state: InspectionState) -> dict[str, Any]:
             {
                 **d,
                 "area_fraction": round(area, 5),
-                "grid_cells": grid_cells(d["polygon"], s.grid_cols, s.grid_rows),
+                "grid_cells": grid_cells(d["polygon"], cols, rows),
                 "priority": priority_for(d["damage_type"], area, d.get("evidence")).value,
                 "low_confidence": d["confidence"] < s.low_confidence_threshold,
                 "needs_field_inspection": needs_field_inspection(
@@ -108,8 +111,8 @@ def score_confidence(state: InspectionState) -> dict[str, Any]:
     out.sort(key=lambda d: (d["grid_cells"][0][1:].zfill(3), d["grid_cells"][0][0]))
     return {
         "detections": out,
-        "grid": {"cols": s.grid_cols, "rows": s.grid_rows, "type": "temporary"},
-        "trace": _log(state, "score_confidence"),
+        "grid": grid,
+        "trace": _log(state, f"score_confidence: grid {cols}x{rows} ({grid.get('type')})"),
     }
 
 
@@ -163,8 +166,10 @@ def build_graph():
 _graph = None
 
 
-def run_inspection(image: np.ndarray) -> InspectionState:
+def run_inspection(image: np.ndarray, grid: dict | None = None) -> InspectionState:
+    """Run the agent on one photo. `grid` is the wall's reference grid; without
+    it the temporary default grid is used."""
     global _graph
     if _graph is None:
         _graph = build_graph()
-    return _graph.invoke({"image": image, "trace": []})
+    return _graph.invoke({"image": image, "grid": dict(grid or default_grid()), "trace": []})

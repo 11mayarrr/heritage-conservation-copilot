@@ -85,3 +85,20 @@ def test_registration_fails_honestly_on_unrelated_images(samples):
     rng = np.random.default_rng(3)
     noise = (rng.random(a.shape) * 255).astype(np.uint8)
     assert not register(a, noise).ok
+
+
+def test_materials_by_location_links_items_to_regions():
+    from app.agents.rules import materials_by_location
+
+    regions = [
+        {"index": 1, "status": "agent", "materials": ["مونة طينية"], "tools": ["مالج"], "grid_cells": ["A1", "B1"]},
+        {"index": 2, "status": "edited", "materials": ["مونة طينية"], "tools": [], "grid_cells": ["B1", "C2"]},
+        {"index": 3, "status": "rejected", "materials": ["مونة طينية"], "tools": ["مالج"], "grid_cells": ["D4"]},
+    ]
+    rows = materials_by_location(regions)
+    mortar = next(r for r in rows if r["name"] == "مونة طينية")
+    assert mortar["kind"] == "material"
+    assert mortar["regions"] == ["R1", "R2"]  # rejected region excluded
+    assert mortar["cells"] == ["A1", "B1", "C2"]
+    trowel = next(r for r in rows if r["name"] == "مالج")
+    assert trowel["regions"] == ["R1"] and trowel["kind"] == "tool"

@@ -11,6 +11,47 @@ export type InspectionStatus = "rejected_quality" | "in_review" | "approved" | "
 export type Priority = "high" | "medium" | "low";
 export type Point = [number, number];
 
+/** Reference grid. type "wall" = defined for this wall; "temporary" = generic default. */
+export interface Grid {
+  cols: number;
+  rows: number;
+  width_m: number | null;
+  height_m: number | null;
+  note: string;
+  type: "wall" | "temporary" | string;
+  version: number;
+}
+
+export interface GridInput {
+  cols: number;
+  rows: number;
+  width_m: number | null;
+  height_m: number | null;
+  note: string;
+}
+
+/** Step 6 output: one material or tool with the regions and grid cells it is used in. */
+export interface MaterialLocation {
+  kind: "material" | "tool";
+  name: string;
+  regions: string[];
+  cells: string[];
+}
+
+export interface GlossaryTerm {
+  id: string;
+  label_ar: string;
+  definition_ar: string;
+  look_for_ar: string;
+  confused_with_ar: string;
+}
+
+export interface Glossary {
+  status: string;
+  note_ar: string;
+  terms: GlossaryTerm[];
+}
+
 export interface Region {
   id: string;
   index: number;
@@ -22,6 +63,8 @@ export interface Region {
   confidence_source: string;
   low_confidence: boolean;
   area_fraction: number;
+  /** Estimated m², only when the wall grid has real dimensions. */
+  area_m2?: number | null;
   grid_cells: string[];
   description: string;
   priority: Priority;
@@ -47,7 +90,7 @@ export interface DetectorInfo {
 export interface Inspection {
   id: string;
   case_number: string;
-  wall: { id: string; code: string; building_name: string };
+  wall: { id: string; code: string; building_name: string; grid?: Grid };
   captured_at: string;
   created_at: string;
   created_by: string;
@@ -69,7 +112,8 @@ export interface Inspection {
     sufficiency?: { sufficient: boolean; reasons_ar: string[]; recommendation_ar: string };
     trace?: string[];
   };
-  grid: { cols: number; rows: number; type: string };
+  grid: Grid;
+  materials_by_location?: MaterialLocation[];
   expert_notes: string;
   approved_by: string | null;
   approved_at: string | null;
@@ -92,8 +136,10 @@ export interface WallSummary {
   building_name: string;
   location_note: string;
   created_at: string;
+  grid: Grid;
+  cell_size_m: [number, number] | null;
   inspection_count: number;
-  inspections: { id: string; case_number: string; status: InspectionStatus; captured_at: string; has_image: boolean }[];
+  inspections: { id: string; case_number: string; status: InspectionStatus; captured_at: string; has_image: boolean; grid_version?: number }[];
 }
 
 export interface Source {
