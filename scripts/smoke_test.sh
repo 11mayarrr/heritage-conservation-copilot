@@ -12,7 +12,11 @@ set -euo pipefail
 BASE="${1:-http://localhost:8080}"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 PHOTO="$HERE/tests/fixtures/wall_with_two_visitors.jpg"
-USER_HDR="X-User-Name: smoke-test"
+# Every /api route except login needs a session, so the smoke test signs in first.
+# Create the account once (see README, "الحسابات"), then:
+#   SMOKE_USER=ci SMOKE_PASSWORD=... bash scripts/smoke_test.sh
+JAR="$(mktemp)"
+trap 'rm -f "$JAR"' EXIT
 CODE="SMOKE-$(date +%s)"
 fail() { echo "FAIL: $*" >&2; exit 1; }
 json() { python3 -c "import sys,json; d=json.load(sys.stdin); print($1)"; }
@@ -27,14 +31,19 @@ done
 echo "2/7 frontend (SPA fallback)"
 curl -fsS "$BASE/inspections/does-not-exist" | grep -q '<div id="root"' || fail "index.html not served"
 
+echo "2b/7 sign in"
+[ -n "${SMOKE_USER:-}" ] && [ -n "${SMOKE_PASSWORD:-}" ] || fail "set SMOKE_USER and SMOKE_PASSWORD (an existing account)"
+LOGIN=$(python3 -c 'import json,os; print(json.dumps({"username": os.environ["SMOKE_USER"], "password": os.environ["SMOKE_PASSWORD"]}))')
+curl -fsS -c "$JAR" -X POST "$BASE/api/auth/login" -H 'content-type: application/json' -d "$LOGIN" >/dev/null || fail "login failed"
+
 echo "3/7 wall with its own grid"
-WALL=$(curl -fsS -X POST "$BASE/api/walls" -H "$USER_HDR" -H 'content-type: application/json' \
+WALL=$(curl -fsS -X POST "$BASE/api/walls" -b "$JAR" -H 'content-type: application/json' \
   -d "{\"code\":\"$CODE\",\"grid\":{\"cols\":8,\"rows\":3,\"width_m\":8,\"height_m\":3}}")
 WALL_ID=$(echo "$WALL" | json 'd["id"]')
 [ "$(echo "$WALL" | json 'd["grid"]["type"]')" = "wall" ] || fail "wall grid not saved"
 
 echo "4/7 upload a photo with two visitors"
-INSP=$(curl -fsS -X POST "$BASE/api/inspections" -H "$USER_HDR" -F "wall_id=$WALL_ID" -F "image=@$PHOTO;type=image/jpeg")
+INSP=$(curl -fsS -X POST "$BASE/api/inspections" -b "$JAR" -F "wall_id=$WALL_ID" -F "image=@$PHOTO;type=image/jpeg")
 INSP_ID=$(echo "$INSP" | json 'd["id"]')
 echo "$INSP" | json '"   status=%s faces_hidden=%s regions=%d" % (d["status"], d["privacy"].get("faces_hidden"), len(d["regions"]))'
 
@@ -55,11 +64,11 @@ for r in d["regions"]:
 
 echo "6/7 stored image, atlas, report"
 for p in "image.jpg" "atlas.png" "report.html"; do
-  code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/api/inspections/$INSP_ID/$p")
+  code=$(curl -s -b "$JAR" -o /dev/null -w '%{http_code}' "$BASE/api/inspections/$INSP_ID/$p")
   [ "$code" = 200 ] || fail "$p returned $code"
 done
 
 echo "7/7 storage persists (re-read the case)"
-curl -fsS "$BASE/api/inspections/$INSP_ID" | json 'd["has_image"]' | grep -q True || fail "image missing"
+curl -fsS -b "$JAR" "$BASE/api/inspections/$INSP_ID" | json 'd["has_image"]' | grep -q True || fail "image missing"
 
 echo "OK: stack works end to end ($BASE, case $(echo "$INSP" | json 'd["case_number"]'))"

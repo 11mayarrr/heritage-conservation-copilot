@@ -63,7 +63,7 @@ cd frontend && npm install && npm run dev
 ```bash
 docker compose up -d --build
 # الواجهة: http://localhost:8080   — واجهة API: http://localhost:8000/docs
-bash scripts/smoke_test.sh     # فحص من الطرف للطرف عبر nginx على المنفذ 8080
+SMOKE_USER=<حساب> SMOKE_PASSWORD=<كلمة السر> bash scripts/smoke_test.sh     # فحص من الطرف للطرف عبر nginx على المنفذ 8080 (يحتاج حسابًا موجودًا لأن الدخول مطلوب)
 docker compose down            # إيقاف (أضف -v لحذف قاعدة البيانات والصور)
 ```
 
