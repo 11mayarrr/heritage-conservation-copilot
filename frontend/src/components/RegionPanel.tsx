@@ -3,6 +3,7 @@ import { api } from "../api/client";
 import type { DamageType, Priority, Region, Retrieval } from "../api/types";
 import { DAMAGE, DAMAGE_TYPES, INSUFFICIENT_AR, PRIORITY } from "../lib/constants";
 import { pct } from "../lib/format";
+import { joinList, splitList } from "../lib/lists";
 import { Confidence, DamageLabel, RegionFlags } from "./Badges";
 import { TreatmentCard } from "./TreatmentCard";
 
@@ -14,8 +15,6 @@ interface Props {
   onDeleted: () => void;
 }
 
-const splitList = (s: string) => s.split(/[،,\n]/).map((x) => x.trim()).filter(Boolean);
-
 export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted }: Props) {
   const [type, setType] = useState<DamageType>(region.damage_type);
   const [confidence, setConfidence] = useState(region.confidence);
@@ -23,8 +22,8 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
   const [note, setNote] = useState(region.note);
   const [field, setField] = useState(region.needs_field_inspection);
   const [treatmentId, setTreatmentId] = useState(region.treatment_id ?? "");
-  const [materials, setMaterials] = useState(region.materials.join("، "));
-  const [tools, setTools] = useState(region.tools.join("، "));
+  const [materials, setMaterials] = useState(joinList(region.materials));
+  const [tools, setTools] = useState(joinList(region.tools));
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -37,8 +36,8 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
     setNote(region.note);
     setField(region.needs_field_inspection);
     setTreatmentId(region.treatment_id ?? "");
-    setMaterials(region.materials.join("، "));
-    setTools(region.tools.join("، "));
+    setMaterials(joinList(region.materials));
+    setTools(joinList(region.tools));
     setReason("");
     setErr(null);
   }, [region]);
@@ -87,8 +86,8 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
     setTreatmentId(id);
     const t = retrieval?.results.find((x) => x.id === id);
     if (t) {
-      setMaterials(t.materials.join("، "));
-      setTools(t.tools.join("، "));
+      setMaterials(joinList(t.materials));
+      setTools(joinList(t.tools));
     }
   };
 
@@ -151,12 +150,12 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
       </label>
       {retrieval && !retrieval.sufficient && <div className="banner warn">{retrieval.message_ar || INSUFFICIENT_AR}</div>}
       <label>
-        المواد (افصل بفاصلة)
-        <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} style={{ minHeight: 50 }} />
+        المواد (كل مادة في سطر)
+        <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} style={{ minHeight: 80 }} />
       </label>
       <label>
-        الأدوات (افصل بفاصلة)
-        <textarea value={tools} onChange={(e) => setTools(e.target.value)} style={{ minHeight: 50 }} />
+        الأدوات (كل أداة في سطر)
+        <textarea value={tools} onChange={(e) => setTools(e.target.value)} style={{ minHeight: 80 }} />
       </label>
       <label>
         سبب التعديل (يُحفظ في السجل)
