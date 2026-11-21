@@ -10,6 +10,7 @@ Output is tagged `model_synthetic_only` and never reported as validated.
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import cv2
@@ -68,7 +69,9 @@ class SyntheticPixelDetector:
     def __init__(self, weights: str | Path | None = None):
         import joblib
 
-        path = Path(weights) if weights else DEFAULT_WEIGHTS
+        # Order: explicit argument, then HCC_PIXEL_WEIGHTS (e.g. the model trained on the stored dataset), then the default.
+        env = os.environ.get("HCC_PIXEL_WEIGHTS")
+        path = Path(weights or env) if (weights or env) else DEFAULT_WEIGHTS
         if not path.exists():
             raise RuntimeError(f"{path} not found. Run: python scripts/train_synthetic.py")
         self.clf = joblib.load(path)

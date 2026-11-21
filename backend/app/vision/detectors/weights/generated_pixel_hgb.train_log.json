@@ -1,0 +1,21 @@
+{
+  "note": "Trained on a stored dataset drawn by code. Not real walls; no accuracy claim on At-Turaif.",
+  "date": "2026-11-21T05:16:08+00:00",
+  "data": "generated_procedural",
+  "train_images": 800,
+  "test_images_not_used": 200,
+  "sampled_pixels_by_class": {
+    "0": 2000000,
+    "1": 466784,
+    "2": 1136403,
+    "3": 1459352,
+    "4": 299927,
+    "5": 696052
+  },
+  "model": "HistGradientBoostingClassifier(max_iter=120, learning_rate=0.12, max_leaf_nodes=24, class_weight=balanced)",
+  "sklearn": "1.9.1",
+  "seed": 0,
+  "seconds": 140.7,
+  "weights": "generated_pixel_hgb.joblib",
+  "weights_mb": 0.37
+}

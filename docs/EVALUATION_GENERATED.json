@@ -1,0 +1,117 @@
+{
+  "note": "Held-out CODE-DRAWN images only. Not accuracy on real At-Turaif walls.",
+  "dataset": "generated_procedural",
+  "test_images": 200,
+  "iou_threshold": 0.5,
+  "models": {
+    "trained_on_this_dataset": {
+      "weights": "generated_pixel_hgb.joblib",
+      "macro_f1": 0.817,
+      "macro_pixel_iou": 0.804,
+      "per_type": {
+        "crack": {
+          "tp": 317,
+          "fp": 336,
+          "fn": 75,
+          "precision": 0.48545176110260335,
+          "recall": 0.8086734693877551,
+          "f1": 0.6066985645933013,
+          "pixel_iou": 0.597882909973267
+        },
+        "edge_erosion": {
+          "tp": 249,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.9880952380952381,
+          "recall": 0.950381679389313,
+          "f1": 0.9688715953307394,
+          "pixel_iou": 0.94230692519972
+        },
+        "material_loss": {
+          "tp": 122,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.991869918699187,
+          "recall": 1.0,
+          "f1": 0.9959183673469388,
+          "pixel_iou": 0.7978566657184772
+        },
+        "moisture_erosion": {
+          "tp": 144,
+          "fp": 73,
+          "fn": 50,
+          "precision": 0.663594470046083,
+          "recall": 0.7422680412371134,
+          "f1": 0.7007299270072993,
+          "pixel_iou": 0.7610859865134098
+        },
+        "plaster_loss": {
+          "tp": 202,
+          "fp": 15,
+          "fn": 78,
+          "precision": 0.9308755760368663,
+          "recall": 0.7214285714285714,
+          "f1": 0.812877263581489,
+          "pixel_iou": 0.9186049065471876
+        }
+      }
+    },
+    "older_model_narrow_generator": {
+      "weights": "synthetic_pixel_hgb.joblib",
+      "macro_f1": 0.578,
+      "macro_pixel_iou": 0.574,
+      "per_type": {
+        "crack": {
+          "tp": 273,
+          "fp": 223,
+          "fn": 119,
+          "precision": 0.5504032258064516,
+          "recall": 0.6964285714285714,
+          "f1": 0.6148648648648648,
+          "pixel_iou": 0.6128085916322646
+        },
+        "edge_erosion": {
+          "tp": 218,
+          "fp": 85,
+          "fn": 44,
+          "precision": 0.7194719471947195,
+          "recall": 0.8320610687022901,
+          "f1": 0.7716814159292037,
+          "pixel_iou": 0.6934069355231894
+        },
+        "material_loss": {
+          "tp": 122,
+          "fp": 59,
+          "fn": 0,
+          "precision": 0.6740331491712708,
+          "recall": 1.0,
+          "f1": 0.8052805280528054,
+          "pixel_iou": 0.7560236689311343
+        },
+        "moisture_erosion": {
+          "tp": 115,
+          "fp": 316,
+          "fn": 79,
+          "precision": 0.2668213457076566,
+          "recall": 0.5927835051546392,
+          "f1": 0.368,
+          "pixel_iou": 0.3911445081866292
+        },
+        "plaster_loss": {
+          "tp": 171,
+          "fp": 589,
+          "fn": 109,
+          "precision": 0.225,
+          "recall": 0.6107142857142858,
+          "f1": 0.3288461538461539,
+          "pixel_iou": 0.41690126222392593
+        }
+      }
+    }
+  },
+  "real_images": {
+    "images": 0,
+    "result": null,
+    "why": "no expert-approved real images exist yet (plan D3)"
+  }
+}

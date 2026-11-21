@@ -12,3 +12,5 @@ sample_data/synthetic/
 *.log
 .DS_Store
 models/
+sample_data/generated/
+sample_data/generated_procedural/
