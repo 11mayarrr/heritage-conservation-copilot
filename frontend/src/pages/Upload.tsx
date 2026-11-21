@@ -6,6 +6,7 @@ import { DamageLabel, InspectionStatusBadge } from "../components/Badges";
 import { EMPTY_GRID, GridEditor, GridPreview, gridError, gridSummary, toGridInput } from "../components/GridEditor";
 import { DetectorNotice, PrivacyNotice } from "../components/Notices";
 import { pct } from "../lib/format";
+import { splitQualityNotes } from "../lib/qualityNotes";
 import { useAsync } from "../lib/useAsync";
 
 export default function Upload() {
@@ -209,6 +210,7 @@ function UploadResult({ r }: { r: Inspection }) {
       </>
     );
   }
+  const { tiltBanner, notes } = splitQualityNotes(r.quality);
   return (
     <>
       <div className="toolbar" style={{ justifyContent: "space-between" }}>
@@ -232,7 +234,8 @@ function UploadResult({ r }: { r: Inspection }) {
           <ul>{r.analysis.sufficiency.reasons_ar.map((x) => <li key={x}>{x}</li>)}</ul>
         </div>
       )}
-      {r.quality.warnings.length > 0 && <small className="muted">ملاحظات الجودة: {r.quality.warnings.join(" ")}</small>}
+      {tiltBanner && <div className="banner warn" style={{ marginTop: 10 }}>{tiltBanner}</div>}
+      {notes.length > 0 && <small className="muted">ملاحظات الجودة: {notes.join(" ")}</small>}
       <div className="toolbar" style={{ marginTop: 10 }}>
         <Link className="btn primary" to={`/atlas/${r.id}`}>فتح خريطة التلف للمراجعة</Link>
         <a className="btn" href={urls.image(r.id, true)}>تنزيل الصورة بعد إخفاء الوجوه</a>
