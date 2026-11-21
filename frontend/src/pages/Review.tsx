@@ -2,9 +2,11 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import type { RegionStatus } from "../api/types";
+import { useAuth } from "../components/AuthProvider";
 import { Confidence, DamageLabel, InspectionStatusBadge, RegionFlags } from "../components/Badges";
 import { InspectionPicker } from "../components/InspectionPicker";
 import { DetectorNotice } from "../components/Notices";
+import { APPROVE_ONLY_HINT, canApprove } from "../lib/auth";
 import { PRIORITY, REGION_STATUS } from "../lib/constants";
 import { formatDate, pct } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
@@ -19,6 +21,8 @@ export default function Review() {
 
 function ReviewWorkspace({ id }: { id: string }) {
   const { data: insp, error, reload } = useAsync(() => api.inspection(id), [id]);
+  const { me } = useAuth();
+  const mayApprove = canApprove(me?.role);
   const [filter, setFilter] = useState<Filter>("all");
   const [notes, setNotes] = useState<string | null>(null);
   const [reason, setReason] = useState("");
@@ -103,7 +107,7 @@ function ReviewWorkspace({ id }: { id: string }) {
                     <div className="toolbar">
                       <Link className="btn" to={`/atlas/${id}`}>تعديل</Link>
                       {r.status !== "approved" && (
-                        <button className="ok" disabled={busy} onClick={() => run(() => api.approveRegion(id, r.id))}>اعتماد</button>
+                        <button className="ok" disabled={busy || !mayApprove} title={mayApprove ? undefined : APPROVE_ONLY_HINT} onClick={() => run(() => api.approveRegion(id, r.id))}>اعتماد</button>
                       )}
                     </div>
                   </td>
@@ -125,8 +129,9 @@ function ReviewWorkspace({ id }: { id: string }) {
           <h2>قرار الاعتماد</h2>
           <p className="muted">اعتماد الحالة يعتمد كل المناطق غير المحذوفة. لا يمكن الاعتماد إذا وُجدت مناطق معادة للمراجعة.</p>
           <label>سبب القرار (يُحفظ في السجل)<input value={reason} onChange={(e) => setReason(e.target.value)} /></label>
+          {!mayApprove && <div className="banner info">{APPROVE_ONLY_HINT}</div>}
           <div className="toolbar">
-            <button className="ok" disabled={busy || insp.status === "approved"} onClick={() => run(() => api.approve(id, reason))}>اعتماد النتيجة</button>
+            <button className="ok" disabled={busy || !mayApprove || insp.status === "approved"} title={mayApprove ? undefined : APPROVE_ONLY_HINT} onClick={() => run(() => api.approve(id, reason))}>اعتماد النتيجة</button>
             <button disabled={busy} onClick={() => run(() => api.returnForReview(id, reason))}>إعادة للمراجعة</button>
             <button disabled={busy} onClick={() => run(() => api.reanalyze(id))} title="إعادة حساب المساحات والمواقع وربط المعالجات الناقصة">إعادة التحليل بعد التعديل</button>
             <Link className="btn navy" to={`/reports?id=${id}`}>التقرير</Link>

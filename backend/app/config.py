@@ -50,6 +50,14 @@ class Settings(BaseSettings):
     sam2_model_id: str | None = None
     sam2_device: str | None = None
 
+    # Accounts and login (step 9). Cookie is HttpOnly + SameSite=Lax; turn
+    # `cookie_secure` on when the site is served over HTTPS.
+    session_hours: int = 12
+    cookie_secure: bool = False
+    login_max_attempts: int = 5  # failed logins before the account is locked
+    login_lock_minutes: int = 15
+    min_password_length: int = 10
+
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
 

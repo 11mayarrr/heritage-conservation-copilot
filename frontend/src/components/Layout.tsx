@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { getUserName, setUserName } from "../api/client";
+import { canApprove } from "../lib/auth";
+import { useAuth } from "./AuthProvider";
 
 const SCOPED = ["/atlas", "/review", "/treatments"];
 
 export function Layout() {
   const loc = useLocation();
-  const [user, setUser] = useState(getUserName());
+  const { me, logout } = useAuth();
   // Keep the open case when moving between the case-scoped sections.
   const m = loc.pathname.match(/^\/(atlas|review|treatments)\/([\w-]+)/);
   const caseId = m?.[2] ?? new URLSearchParams(loc.search).get("id");
@@ -52,17 +52,13 @@ export function Layout() {
           ))}
         </nav>
         <div className="user">
-          <label style={{ color: "#c9bda8" }}>
-            اسم المختص (يظهر في سجل التعديلات)
-            <input
-              value={user}
-              onChange={(e) => {
-                setUser(e.target.value);
-                setUserName(e.target.value);
-              }}
-            />
-          </label>
-          <small style={{ color: "#a99c86" }}>نموذج أولي: لا يوجد تسجيل دخول حقيقي بعد.</small>
+          <div style={{ color: "#f1e9da" }}>
+            <b>{me?.display_name}</b>
+            <div style={{ color: "#a99c86" }}>
+              {me?.role_ar} — {canApprove(me?.role) ? "يعتمد الحالات" : "يرفع ويعدّل، والمختص يعتمد"}
+            </div>
+          </div>
+          <button className="signout" onClick={() => void logout()}>تسجيل الخروج</button>
         </div>
       </aside>
       <main className="main">
