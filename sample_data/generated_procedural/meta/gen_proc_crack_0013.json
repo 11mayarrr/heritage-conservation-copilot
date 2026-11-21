@@ -1,0 +1,18 @@
+{
+ "source": "generated",
+ "name": "gen_proc_crack_0013",
+ "generated_by": "procedural-code: backend/app/vision/synthetic.py make_labeled_varied",
+ "date": "2026-11-21T05:11:43+00:00",
+ "seed": 100012,
+ "seed_used": 100012000,
+ "prompt": null,
+ "focus_damage_type": "crack",
+ "label_ids_present": [
+  1,
+  2,
+  3
+ ],
+ "split": "train",
+ "expert_review": "none: drawn by code, nothing to review for realism",
+ "note": "Drawn by code. Not a real wall. Do not report scores on it as accuracy on At-Turaif."
+}
