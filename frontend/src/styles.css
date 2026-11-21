@@ -48,6 +48,9 @@ code { direction: ltr; unicode-bidi: embed; }
 .nav a.active { background: var(--clay); color: #fff; }
 .nav .num { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.12); font-size: 0.72rem; display: grid; place-items: center; flex: none; }
 .sidebar .user { margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 12px; font-size: 0.8rem; }
+.sidebar .user .signout { margin-top: 8px; width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+.login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+.login-card { width: min(380px, 100%); }
 .sidebar .user input { width: 100%; margin-top: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
 .main { padding: 20px 24px 40px; min-width: 0; }
 .topbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 14px; }

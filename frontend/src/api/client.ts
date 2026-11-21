@@ -4,30 +4,14 @@ import type {
   Health,
   Inspection,
   KnowledgeSource,
+  Me,
   Region,
   Retrieval,
   SegmentPreview,
   Treatment,
   WallSummary,
 } from "./types";
-
-const USER_KEY = "hcc.user";
-
-export function getUserName(): string {
-  try {
-    return localStorage.getItem(USER_KEY) || "مختص تجريبي";
-  } catch {
-    return "مختص تجريبي";
-  }
-}
-
-export function setUserName(name: string): void {
-  try {
-    localStorage.setItem(USER_KEY, name);
-  } catch {
-    /* storage unavailable: name lasts for this page only */
-  }
-}
+import { UNAUTHORIZED_EVENT } from "../lib/auth";
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -37,9 +21,10 @@ export class ApiError extends Error {
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
-  headers.set("X-User-Name", encodeURIComponent(getUserName()));
   if (init.body && !(init.body instanceof FormData)) headers.set("Content-Type", "application/json");
-  const res = await fetch(path, { ...init, headers });
+  // The login session travels in an HttpOnly cookie (same origin through the dev proxy).
+  const res = await fetch(path, { ...init, headers, credentials: "same-origin" });
+  if (res.status === 401 && path !== "/api/auth/login") window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
   if (!res.ok) {
     let msg = `خطأ ${res.status}`;
     try {
@@ -58,6 +43,11 @@ const json = (body: unknown) => JSON.stringify(body);
 
 export const api = {
   health: () => request<Health>("/api/health"),
+
+  me: () => request<Me>("/api/auth/me"),
+  login: (username: string, password: string) =>
+    request<Me>("/api/auth/login", { method: "POST", body: json({ username, password }) }),
+  logout: () => request<void>("/api/auth/logout", { method: "POST" }),
 
   walls: () => request<WallSummary[]>("/api/walls"),
   createWall: (code: string, building_name: string, location_note = "") =>

@@ -3,10 +3,11 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import audit_log, comparisons, inspections, knowledge, walls
+from app.api import audit_log, auth, comparisons, inspections, knowledge, walls
+from app.api.deps import current_account
 from app.config import get_settings
 from app.database.session import init_engine
 from app.vision.detectors import get_detector
@@ -33,8 +34,9 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.include_router(auth.router)  # login is the only route that needs no session
     for r in (walls.router, inspections.router, comparisons.router, knowledge.router, audit_log.router):
-        app.include_router(r)
+        app.include_router(r, dependencies=[Depends(current_account)])
 
     @app.get("/api/health")
     def health():

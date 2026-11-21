@@ -1,16 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider, useAuth } from "./components/AuthProvider";
 import { Layout } from "./components/Layout";
 import Atlas from "./pages/Atlas";
 import AuditLog from "./pages/AuditLog";
 import Compare from "./pages/Compare";
 import Dashboard from "./pages/Dashboard";
 import Knowledge from "./pages/Knowledge";
+import Login from "./pages/Login";
 import Reports from "./pages/Reports";
 import Review from "./pages/Review";
 import Treatments from "./pages/Treatments";
 import Upload from "./pages/Upload";
 
-export default function App() {
+function Gate() {
+  const { me, loading } = useAuth();
+  if (loading) return <div className="empty">جارٍ التحميل…</div>;
+  if (!me) return <Login />;
   return (
     <BrowserRouter>
       <Routes>
@@ -28,5 +33,13 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <Gate />
+    </AuthProvider>
   );
 }

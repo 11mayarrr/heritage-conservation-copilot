@@ -39,6 +39,9 @@ cd frontend && npm install && npm run dev
 # افتح http://localhost:5173
 ```
 
+**أول مرة:** أنشئ حسابًا للدخول (لا توجد صفحة تسجيل مفتوحة):
+`python scripts/manage_users.py create` — الدور «مساعد» يرفع ويعدّل، و«مختص» وحده يعتمد.
+
 يستخدم SQLite افتراضيًا (`data/hcc.db`) ويحفظ الصور في `data/storage/`.
 للعرض بمناطق وهمية تُظهر كل الألوان: `HCC_DETECTOR=mock python -m uvicorn app.main:app`.
 
@@ -61,7 +64,7 @@ python scripts/make_synthetic_samples.py   # يكتب sample_data/synthetic/
 ## الاختبارات
 
 ```bash
-python -m pytest -q tests                 # 35 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان)
+python -m pytest -q tests                 # 60 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان، حسابات وأدوار)
 HCC_TEST_DATABASE_URL=postgresql+psycopg://hcc:hcc@localhost/hcc python -m pytest -q tests   # على PostgreSQL
 cd frontend && npm test && npm run build
 ```
@@ -138,7 +141,7 @@ HCC_DETECTOR=synthetic_model python -m uvicorn app.main:app --port 8000
 - الشبكة المرجعية مؤقتة (6×4، أعمدة A–F وصفوف 1–4) إلى أن تتوفر الشبكة المعتمدة للجدار.
 - المساحة نسبة من مساحة الصورة، لا بالمتر المربع، لعدم توفر مرجع قياس.
 - قواعد الأولوية مؤقتة وموثقة في التقرير.
-- اسم المختص يُدخل في الواجهة؛ لا يوجد تسجيل دخول حقيقي.
+- الدخول بحسابات يُنشئها الفريق (`scripts/manage_users.py`)؛ الاعتماد للمختص فقط، واسم المعتمد في السجل والتقرير يؤخذ من حسابه.
 
 ## القيود المعروفة
 
@@ -147,6 +150,7 @@ HCC_DETECTOR=synthetic_model python -m uvicorn app.main:app --port 8000
 - كاشف الوجوه (Haar) يفوت الوجوه الصغيرة أو الجانبية؛ لذلك يوجد إخفاء يدوي وتنبيه في الواجهة.
 - قاعدة المعرفة مأخوذة من مرجع أمريكي عام 1978 عن مباني الأدوبي، وليست خاصة بالعمارة النجدية، وكل مدخلاتها "غير معتمدة".
 - لا يقاس ميل زاوية التصوير آليًا بعد.
+- الحسابات: لا اعتماد مزدوج ولا صفحة إدارة ولا استعادة كلمة سر، والكوكي بلا HTTPS افتراضيًا (`HCC_COOKIE_SECURE=true` خلف HTTPS).
 
 ## المصادر المستخدمة
 
