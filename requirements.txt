@@ -10,6 +10,8 @@ psycopg[binary]>=3.1
 opencv-python-headless>=4.10,<5
 numpy>=1.26
 Jinja2>=3.1
+# Excel export of approved inspections (GeoJSON needs no extra package).
+openpyxl>=3.1
 langgraph>=0.2
 
 # Tests

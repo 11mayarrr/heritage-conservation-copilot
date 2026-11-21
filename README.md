@@ -80,7 +80,7 @@ backend/app/
   privacy/      anonymizer.py + ملفات Haar
   rag/          knowledge_base.py (استرجاع مغلق مع المصادر)
   reports/      generator.py + templates/report.html
-  services/     inspections, comparisons, audit, storage
+  services/     inspections, comparisons, audit, storage, export (Excel/GeoJSON للحالات المعتمدة)
   database/     SQLAlchemy models + session
   evaluation/   metrics.py (Precision / Recall / F1 / IoU)
 frontend/src/   React + TypeScript + Konva (9 أقسام، RTL)
