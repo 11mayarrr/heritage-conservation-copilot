@@ -8,12 +8,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.deps import current_user
-from app.database.models import Inspection, Region, Wall
+from app.database.models import AuditEntry, Inspection, Region, Wall
 from app.database.session import get_db
 from app.models.enums import RegionStatus
 from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction, SegmentRequest
+from app.rag.knowledge_base import get_kb
 from app.reports.generator import atlas_image, build_report
+from app.services import export as exporter
 from app.services import inspections as svc
+from app.services.audit import serialize as serialize_audit
 from app.services.storage import get_storage
 from app.vision.geometry import mask_to_polygons, polygon_area
 from app.vision.imageio import ImageDecodeError, decode_image, encode_png
@@ -115,6 +118,59 @@ def report(inspection_id: str, download: bool = False, db: Session = Depends(get
     html = build_report(db, insp)
     headers = {"Content-Disposition": f'attachment; filename="{insp.case_number}-report.html"'} if download else {}
     return HTMLResponse(html, headers=headers)
+
+
+def _export_inputs(insp: Inspection) -> tuple[dict, dict[str, dict]]:
+    """The inspection as served by the API plus the treatments its regions use."""
+    data = svc.inspection_out(insp)
+    kb = get_kb()
+    treatments: dict[str, dict] = {}
+    for r in data["regions"]:
+        tid = r["treatment_id"]
+        if tid and tid not in treatments:
+            t = kb.get(tid)
+            if t:
+                treatments[tid] = t.to_dict()
+    return data, treatments
+
+
+@router.get("/inspections/{inspection_id}/export.xlsx")
+def export_xlsx(inspection_id: str, db: Session = Depends(get_db)):
+    """Excel workbook (case summary, regions, audit log). Approved inspections only."""
+    insp = _insp(db, inspection_id)
+    data, treatments = _export_inputs(insp)
+    audit_rows = [
+        serialize_audit(e)
+        for e in db.scalars(
+            select(AuditEntry).where(AuditEntry.inspection_id == insp.id).order_by(AuditEntry.at, AuditEntry.id)
+        )
+    ]
+    try:
+        content = exporter.build_xlsx(data, audit_rows, treatments)
+    except exporter.NotApproved as e:
+        raise HTTPException(409, str(e))
+    return Response(
+        content,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{insp.case_number}-damage-table.xlsx"'},
+    )
+
+
+@router.get("/inspections/{inspection_id}/export.geojson")
+def export_geojson(inspection_id: str, db: Session = Depends(get_db)):
+    """GeoJSON of the damage regions in local wall-image coordinates (not geographic).
+    Approved inspections only."""
+    insp = _insp(db, inspection_id)
+    data, treatments = _export_inputs(insp)
+    try:
+        obj = exporter.build_geojson(data, treatments)
+    except exporter.NotApproved as e:
+        raise HTTPException(409, str(e))
+    return Response(
+        exporter.geojson_text(obj),
+        media_type="application/geo+json",
+        headers={"Content-Disposition": f'attachment; filename="{insp.case_number}-regions.geojson"'},
+    )
 
 
 @router.put("/inspections/{inspection_id}/notes")

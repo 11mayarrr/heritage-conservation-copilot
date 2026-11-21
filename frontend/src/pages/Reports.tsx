@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { api, urls } from "../api/client";
 import { InspectionStatusBadge } from "../components/Badges";
+import { EXPORT_BLOCKED_HINT, EXPORT_NOTE, canExport } from "../lib/exports";
 import { formatDate } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
 
@@ -31,6 +32,17 @@ export default function Reports() {
                       <a className="btn" href={urls.report(i.id, true)}>تنزيل HTML</a>
                       <a className="btn" href={urls.atlas(i.id, true)}>الخريطة PNG</a>
                       <a className="btn" href={urls.image(i.id, true)}>الصورة المخفية</a>
+                      {canExport(i.status) ? (
+                        <>
+                          <a className="btn primary" href={urls.exportXlsx(i.id)}>تصدير Excel</a>
+                          <a className="btn primary" href={urls.exportGeojson(i.id)}>تصدير GeoJSON</a>
+                        </>
+                      ) : (
+                        <>
+                          <button disabled title={EXPORT_BLOCKED_HINT}>تصدير Excel</button>
+                          <button disabled title={EXPORT_BLOCKED_HINT}>تصدير GeoJSON</button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -40,6 +52,8 @@ export default function Reports() {
           </table>
         </div>
         <small className="muted">لحفظ التقرير بصيغة PDF: افتح التقرير ثم استخدم الطباعة في المتصفح واختر «حفظ كـ PDF».</small>
+        <br />
+        <small className="muted">{EXPORT_NOTE}</small>
       </div>
       {selected && (
         <div className="card">
