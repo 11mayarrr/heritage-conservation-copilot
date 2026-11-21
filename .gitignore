@@ -14,3 +14,5 @@ sample_data/generated/
 .DS_Store
 models/
 *.tsbuildinfo
+sample_data/generated/
+sample_data/generated_procedural/

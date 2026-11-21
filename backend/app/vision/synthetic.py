@@ -113,3 +113,65 @@ def make_labeled(seed: int, w: int = 640, h: int = 480) -> tuple[np.ndarray, np.
     img = cv2.GaussianBlur(img, (0, 0), 0.6)
     img = img * rng.uniform(0.9, 1.1) + rng.uniform(-8, 8)
     return np.clip(img, 0, 255).astype(np.uint8), lab
+
+
+# --------------------------------------------------------------------------
+# Varied version (task C4, code-only path). Same drawing code as make_labeled,
+# plus camera/lighting variation that never touches the labels. Still invented
+# by code: more variety makes a model less tied to ONE look, not closer to real
+# At-Turaif walls.
+
+MIN_FOCUS_PIXELS = 0.004  # the requested damage type must cover at least this share of the image
+
+
+def vary_photometry(img: np.ndarray, rng) -> np.ndarray:
+    """Lighting, colour cast, shadow, vignette, defocus, noise and JPEG loss. Labels are unaffected."""
+    h, w = img.shape[:2]
+    out = img.astype(np.float32)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    # Uneven sunlight: a linear ramp in a random direction.
+    a = rng.uniform(0, 2 * np.pi)
+    ramp = (np.cos(a) * (xx / w - 0.5) + np.sin(a) * (yy / h - 0.5)) * rng.uniform(0.0, 0.5)
+    out *= (1 + ramp)[..., None]
+    # Soft cast shadow band (a hard negative: dark but not damage).
+    if rng.random() < 0.4:
+        band = np.zeros((h, w), np.float32)
+        x0 = int(rng.uniform(0.1, 0.8) * w)
+        band[:, x0 : x0 + int(rng.uniform(0.08, 0.25) * w)] = 1
+        band = cv2.GaussianBlur(band, (0, 0), rng.uniform(10, 30))
+        out *= (1 - rng.uniform(0.15, 0.35) * band)[..., None]
+    # Colour temperature.
+    out *= rng.uniform(0.93, 1.07, 3).astype(np.float32)
+    # Vignette.
+    r = np.hypot(xx / w - 0.5, yy / h - 0.5)
+    out *= (1 - rng.uniform(0, 0.25) * r**2 * 4)[..., None]
+    # Defocus or slight motion blur.
+    if rng.random() < 0.5:
+        out = cv2.GaussianBlur(out, (0, 0), rng.uniform(0.5, 1.8))
+    elif rng.random() < 0.3:
+        k = int(rng.integers(3, 8))
+        kern = np.zeros((k, k), np.float32)
+        kern[k // 2, :] = 1.0 / k
+        out = cv2.filter2D(out, -1, kern)
+    out += rng.normal(0, rng.uniform(0.5, 4.5), out.shape)
+    out = np.clip(out, 0, 255).astype(np.uint8)
+    ok, buf = cv2.imencode(".jpg", out, [cv2.IMWRITE_JPEG_QUALITY, int(rng.integers(55, 95))])
+    return cv2.imdecode(buf, cv2.IMREAD_COLOR) if ok else out
+
+
+def make_labeled_varied(seed: int, focus: int | None = None, w: int = 640, h: int = 480) -> tuple[np.ndarray, np.ndarray, int]:
+    """Return (BGR image, label mask, seed actually used).
+
+    `focus` (a label id 1-5) forces that damage type to appear with real area by trying
+    nearby seeds in a fixed order, so the result is still fully determined by `seed` and `focus`."""
+    if focus is not None and focus not in LABEL_TO_DAMAGE:
+        raise ValueError(f"focus must be one of {sorted(LABEL_TO_DAMAGE)}")
+    for k in range(200):
+        used = seed * 1000 + k
+        img, lab = make_labeled(used, w, h)
+        if focus is None or (lab == focus).mean() >= MIN_FOCUS_PIXELS:
+            break
+    else:  # pragma: no cover - 200 tries without a match would mean the generator changed
+        raise RuntimeError(f"no image with label {focus} found for seed {seed}")
+    rng = np.random.default_rng(seed + 7_000_003)
+    return vary_photometry(img, rng), lab, used
