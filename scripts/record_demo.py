@@ -172,7 +172,7 @@ def make_scenes(rec: Recorder, url: str, live_code: str, cmp_code: str):
         wall = page.locator("select").nth(0)
         wall.select_option(value=wall.locator("option", has_text=cmp_code).get_attribute("value"))
         page.locator("select").nth(1).select_option(index=1)
-        page.locator("select").nth(2).select_option(index=2)
+        page.locator("select").nth(2).select_option(index=1)  # قائمة «بعد» تستثني لقطة «قبل»
         page.locator("button.primary").first.click()
         page.get_by_text("قبل / بعد").first.wait_for(timeout=60_000)
         rec.pause(3)
