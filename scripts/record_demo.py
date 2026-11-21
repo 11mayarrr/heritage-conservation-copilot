@@ -15,6 +15,7 @@ and the run continues, so one UI change does not lose the whole video.
 from __future__ import annotations
 
 import argparse
+from urllib.parse import urljoin
 import shutil
 import subprocess
 import sys
@@ -156,15 +157,17 @@ def make_scenes(rec: Recorder, url: str, live_code: str, cmp_code: str):
     def s6():
         page.get_by_role("link", name=LABELS["nav_reports"]).first.click()
         rec.pause(1.5)
-        with ctx.expect_page() as info:
-            page.get_by_role("link", name=LABELS["open_report"]).first.click()
-        rp = info.value
-        rp.wait_for_load_state()
-        rp.wait_for_timeout(int(1500 * rec.slow))
+        # التقرير يُفتح عادةً في تبويب جديد، والتسجيل يلتقط التبويب الرئيسي فقط،
+        # لذلك نفتحه في نفس التبويب ثم نرجع حتى يظهر في الفيديو.
+        href = page.get_by_role("link", name=LABELS["open_report"]).first.get_attribute("href")
+        page.goto(urljoin(page.url, href))
+        page.wait_for_load_state()
+        rec.pause(1.5)
         for _ in range(4):
-            rp.mouse.wheel(0, 500)
-            rp.wait_for_timeout(int(700 * rec.slow))
-        rp.close()
+            page.mouse.wheel(0, 500)
+            rec.pause(0.7)
+        page.go_back()
+        rec.pause(1)
 
     def s7():
         page.get_by_role("link", name=LABELS["nav_compare"]).first.click()
