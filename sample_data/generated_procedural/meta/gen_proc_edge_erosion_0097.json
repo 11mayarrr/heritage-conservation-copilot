@@ -1,0 +1,18 @@
+{
+ "source": "generated",
+ "name": "gen_proc_edge_erosion_0097",
+ "generated_by": "procedural-code: backend/app/vision/synthetic.py make_labeled_varied",
+ "date": "2026-11-21T05:11:43+00:00",
+ "seed": 500096,
+ "seed_used": 500096000,
+ "prompt": null,
+ "focus_damage_type": "edge_erosion",
+ "label_ids_present": [
+  1,
+  4,
+  5
+ ],
+ "split": "train",
+ "expert_review": "none: drawn by code, nothing to review for realism",
+ "note": "Drawn by code. Not a real wall. Do not report scores on it as accuracy on At-Turaif."
+}
