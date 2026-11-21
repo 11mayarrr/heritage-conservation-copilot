@@ -57,3 +57,20 @@ def assess_sufficiency(quality: dict, detections: list[dict], threshold: float, 
             else "الصورة كافية للتحليل الأولي، والنتائج تحتاج اعتماد المختص."
         ),
     }
+
+
+def materials_by_location(regions: list[dict]) -> list[dict]:
+    """Step 6 output (challenge brief): one row per material/tool with the damage
+    regions (and grid cells) where it is used. Rejected regions are skipped."""
+    rows: dict[tuple[str, str], dict] = {}
+    for r in regions:
+        if r.get("status") == "rejected":
+            continue
+        for kind, items in (("material", r.get("materials") or []), ("tool", r.get("tools") or [])):
+            for name in items:
+                row = rows.setdefault((kind, name), {"kind": kind, "name": name, "regions": [], "cells": []})
+                row["regions"].append(f"R{r['index']}")
+                for c in r.get("grid_cells") or []:
+                    if c not in row["cells"]:
+                        row["cells"].append(c)
+    return sorted(rows.values(), key=lambda x: (x["kind"] != "material", x["name"]))

@@ -13,6 +13,7 @@ from app.database.session import get_db
 from app.models.enums import RegionStatus
 from app.models.schemas import InspectionNotes, ManualBlur, RegionCreate, RegionUpdate, ReviewAction, SegmentRequest
 from app.reports.generator import atlas_image, build_report
+from app.services import grids
 from app.services import inspections as svc
 from app.services.storage import get_storage
 from app.vision.geometry import mask_to_polygons, polygon_area
@@ -136,6 +137,17 @@ def return_for_review(inspection_id: str, body: ReviewAction, db: Session = Depe
 @router.post("/inspections/{inspection_id}/reanalyze")
 def reanalyze(inspection_id: str, db: Session = Depends(get_db), user: str = Depends(current_user)):
     return svc.inspection_out(_guard(svc.reanalyze, db, _insp(db, inspection_id), user))
+
+
+@router.post("/inspections/{inspection_id}/apply-wall-grid")
+def apply_wall_grid(inspection_id: str, db: Session = Depends(get_db), user: str = Depends(current_user)):
+    """Re-map this case onto its wall's current reference grid (not for approved cases)."""
+    insp = _insp(db, inspection_id)
+    if not svc.apply_grid(db, insp, grids.wall_grid(insp.wall), user, "تطبيق شبكة الجدار الحالية على الحالة"):
+        raise HTTPException(409, "الحالة معتمدة أو مرفوضة الجودة، فتبقى بشبكتها الأصلية. أعدها للمراجعة أولًا.")
+    db.commit()
+    db.refresh(insp)
+    return svc.inspection_out(insp)
 
 
 @router.post("/inspections/{inspection_id}/blur")

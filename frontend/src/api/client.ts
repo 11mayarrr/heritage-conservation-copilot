@@ -1,6 +1,8 @@
 import type {
   AuditEntry,
   Comparison,
+  Glossary,
+  GridInput,
   Health,
   Inspection,
   KnowledgeSource,
@@ -60,8 +62,14 @@ export const api = {
   health: () => request<Health>("/api/health"),
 
   walls: () => request<WallSummary[]>("/api/walls"),
-  createWall: (code: string, building_name: string, location_note = "") =>
-    request<WallSummary>("/api/walls", { method: "POST", body: json({ code, building_name, location_note }) }),
+  createWall: (code: string, building_name: string, location_note = "", grid: GridInput | null = null) =>
+    request<WallSummary>("/api/walls", { method: "POST", body: json({ code, building_name, location_note, grid }) }),
+  setWallGrid: (wallId: string, grid: GridInput, apply_to_open = false, reason = "") =>
+    request<WallSummary & { applied_to: string[]; kept_previous_grid: string[] }>(`/api/walls/${wallId}/grid`, {
+      method: "PUT",
+      body: json({ ...grid, apply_to_open, reason }),
+    }),
+  applyWallGrid: (id: string) => request<Inspection>(`/api/inspections/${id}/apply-wall-grid`, { method: "POST" }),
 
   inspections: () => request<Inspection[]>("/api/inspections"),
   inspection: (id: string) => request<Inspection>(`/api/inspections/${id}`),
@@ -97,6 +105,7 @@ export const api = {
     request<Region>(`/api/inspections/${id}/regions/${rid}/return`, { method: "POST", body: json({ reason }) }),
 
   knowledge: () => request<{ treatments: Treatment[]; sources: KnowledgeSource[] }>("/api/knowledge"),
+  glossary: () => request<Glossary>("/api/knowledge/glossary"),
   retrieve: (damageType: string, context = "") =>
     request<Retrieval>(`/api/knowledge/retrieve?damage_type=${damageType}&context=${encodeURIComponent(context)}`),
 

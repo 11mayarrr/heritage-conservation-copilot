@@ -8,10 +8,27 @@ from pydantic import BaseModel, Field, field_validator
 from app.models.enums import DamageType, Priority, RegionStatus
 
 
+class WallGrid(BaseModel):
+    """Reference grid for one wall. Real dimensions are optional; when given,
+    areas are also estimated in m^2."""
+    cols: int = Field(ge=1, le=26)
+    rows: int = Field(ge=1, le=30)
+    width_m: float | None = Field(default=None, gt=0, le=500)
+    height_m: float | None = Field(default=None, gt=0, le=100)
+    note: str = Field(default="", max_length=500)
+
+
+class WallGridUpdate(WallGrid):
+    # Also re-map the grid cells of this wall's inspections that are not approved yet.
+    apply_to_open: bool = False
+    reason: str = ""
+
+
 class WallCreate(BaseModel):
     code: str = Field(min_length=1, max_length=64)
     building_name: str = ""
     location_note: str = ""
+    grid: WallGrid | None = None
 
 
 class WallOut(BaseModel):

@@ -108,6 +108,12 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
         <dd>{region.grid_cells.join("، ")}</dd>
         <dt>النسبة من الصورة</dt>
         <dd>{pct(region.area_fraction, 2)}</dd>
+        {region.area_m2 != null && (
+          <>
+            <dt>المساحة التقديرية</dt>
+            <dd>≈ {region.area_m2.toFixed(2)} م²</dd>
+          </>
+        )}
         <dt>وصف الوكيل</dt>
         <dd>{region.description || "—"}</dd>
       </dl>

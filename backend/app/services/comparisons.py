@@ -67,6 +67,12 @@ def create_comparison(db: Session, before: Inspection, after: Inspection) -> Com
             "قياس الزيادة نسبي من مساحة الصورة، وليس بالمتر المربع.",
         ],
     }
+    gb, ga = before.grid or {}, after.grid or {}
+    if (gb.get("cols"), gb.get("rows"), gb.get("version")) != (ga.get("cols"), ga.get("rows"), ga.get("version")):
+        comp.result["notes_ar"].append(
+            f"الحالتان حُللتا بشبكتين مرجعيتين مختلفتين ({gb.get('cols')}×{gb.get('rows')} و{ga.get('cols')}×{ga.get('rows')}). "
+            "مطابقة المناطق تعتمد على الحدود لا على رموز الخلايا، لكن رموز الموقع غير قابلة للمقارنة مباشرة."
+        )
     db.commit()
     db.refresh(comp)
     return comp

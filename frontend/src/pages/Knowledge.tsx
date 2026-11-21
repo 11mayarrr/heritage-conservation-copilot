@@ -8,6 +8,7 @@ import { useAsync } from "../lib/useAsync";
 
 export default function Knowledge() {
   const { data, error } = useAsync(() => api.knowledge(), []);
+  const glossary = useAsync(() => api.glossary(), []);
   const [type, setType] = useState<DamageType | "all">("all");
   const list = (data?.treatments ?? []).filter((t) => type === "all" || t.damage_types.includes(type));
 
@@ -32,6 +33,28 @@ export default function Knowledge() {
                   <td>{s.year}</td>
                   <td><span className={`badge ${s.status === "read" ? "approved" : "muted"}`}>{s.status === "read" ? "مقروء ومستخدم" : "غير مقروء — لا يُستشهد به"}</span></td>
                   <td><small>{s.context_note_ar}</small></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="card">
+        <div className="toolbar" style={{ justifyContent: "space-between" }}>
+          <h2 style={{ margin: 0 }}>مسرد التلف</h2>
+          {glossary.data?.status !== "approved" && <span className="badge review">مسودة غير معتمدة</span>}
+        </div>
+        {glossary.data?.note_ar && <small className="muted">{glossary.data.note_ar}</small>}
+        <div className="table-wrap" style={{ marginTop: 8 }}>
+          <table>
+            <thead><tr><th>النوع</th><th>التعريف</th><th>ما يُبحث عنه في الصورة</th><th>قد يُخلط مع</th></tr></thead>
+            <tbody>
+              {glossary.data?.terms.map((g) => (
+                <tr key={g.id}>
+                  <td>{g.id in DAMAGE ? <DamageLabel type={g.id as DamageType} /> : g.label_ar}</td>
+                  <td>{g.definition_ar}</td>
+                  <td>{g.look_for_ar}</td>
+                  <td><small>{g.confused_with_ar}</small></td>
                 </tr>
               ))}
             </tbody>

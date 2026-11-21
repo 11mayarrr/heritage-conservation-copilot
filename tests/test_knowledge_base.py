@@ -59,3 +59,11 @@ def test_empty_library_reports_insufficient(tmp_path):
     kb = KnowledgeBase(tmp_path)
     res = kb.retrieve("crack")
     assert not res["sufficient"] and "غير كافية" in res["message_ar"]
+
+
+def test_glossary_endpoint_covers_every_damage_type(client):
+    from app.models.enums import DamageType
+
+    g = client.get("/api/knowledge/glossary").json()
+    assert g["status"] == "draft_unapproved"  # never presented as an approved glossary
+    assert {t["id"] for t in g["terms"]} == {t.value for t in DamageType}

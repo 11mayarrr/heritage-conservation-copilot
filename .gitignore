@@ -12,3 +12,4 @@ sample_data/synthetic/
 *.log
 .DS_Store
 models/
+*.tsbuildinfo
