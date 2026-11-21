@@ -80,6 +80,17 @@ class Priority(str, Enum):
     LOW = "low"
 
 
+PRIORITY_AR: dict[str, str] = {"high": "عالية", "medium": "متوسطة", "low": "منخفضة"}
+
+CONF_SOURCE_AR: dict[str, str] = {
+    "mock": "وهمية (عرض)",
+    "heuristic_uncalibrated": "تقديرية غير معايرة",
+    "model_unvalidated": "نموذج غير مُقيّم",
+    "model_synthetic_only": "نموذج مدرّب على بيانات اصطناعية",
+    "expert": "حددها المختص",
+}
+
+
 INSUFFICIENT_INFO_AR = (
     "المعلومات غير كافية لتحديد السبب، ويُنصح بإجراء فحص إضافي أو مراجعة مختص."
 )

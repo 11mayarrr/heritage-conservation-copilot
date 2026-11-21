@@ -116,7 +116,7 @@ backend/app/
   privacy/      anonymizer.py + YuNet + ملفات Haar (models/README.md: المصادر والرخص والنتائج)
   rag/          knowledge_base.py (استرجاع مغلق مع المصادر)
   reports/      generator.py + templates/report.html
-  services/     inspections, comparisons, audit, storage, grids (الشبكة لكل جدار)
+  services/     inspections, comparisons, audit, storage, grids (الشبكة لكل جدار), export (Excel/GeoJSON للحالات المعتمدة)
   database/     SQLAlchemy models + session
   evaluation/   metrics.py (Precision / Recall / F1 / IoU)
 frontend/src/   React + TypeScript + Konva (9 أقسام، RTL)

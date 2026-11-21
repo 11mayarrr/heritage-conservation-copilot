@@ -111,5 +111,7 @@ export const urls = {
   image: (id: string, download = false) => `/api/inspections/${id}/image.jpg${download ? "?download=true" : ""}`,
   atlas: (id: string, download = false) => `/api/inspections/${id}/atlas.png${download ? "?download=true" : ""}`,
   report: (id: string, download = false) => `/api/inspections/${id}/report.html${download ? "?download=true" : ""}`,
+  exportXlsx: (id: string) => `/api/inspections/${id}/export.xlsx`,
+  exportGeojson: (id: string) => `/api/inspections/${id}/export.geojson`,
   comparisonImage: (cid: string, name: "side_by_side" | "after_aligned") => `/api/comparisons/${cid}/${name}.jpg`,
 };

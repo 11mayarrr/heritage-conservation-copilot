@@ -13,10 +13,12 @@ from sqlalchemy.orm import Session
 from app.agents.rules import PRIORITY_RULES_AR, materials_by_location
 from app.database.models import AuditEntry, Inspection
 from app.models.enums import (
+    CONF_SOURCE_AR,
     DAMAGE_COLORS,
     DAMAGE_LABELS_AR,
     INSUFFICIENT_INFO_AR,
     PRELIMINARY_WARNING_AR,
+    PRIORITY_AR,
     DamageType,
     RegionStatus,
 )
@@ -37,14 +39,6 @@ STATUS_AR = {
     "approved": "معتمدة",
     "returned": "أعيدت للمراجعة",
     "rejected_quality": "مرفوضة لجودة الصورة",
-}
-PRIORITY_AR = {"high": "عالية", "medium": "متوسطة", "low": "منخفضة"}
-CONF_SOURCE_AR = {
-    "mock": "وهمية (عرض)",
-    "heuristic_uncalibrated": "تقديرية غير معايرة",
-    "model_unvalidated": "نموذج غير مُقيّم",
-    "model_synthetic_only": "نموذج مدرّب على بيانات اصطناعية",
-    "expert": "حددها المختص",
 }
 
 
