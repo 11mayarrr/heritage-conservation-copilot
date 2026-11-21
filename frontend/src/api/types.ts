@@ -62,6 +62,12 @@ export interface Inspection {
     contrast: number;
     issues: string[];
     warnings: string[];
+    /** Rough camera-tilt estimate. Absent on cases analysed before it existed. */
+    tilt?: {
+      status: "frontal" | "slight" | "strong" | "partial" | "unmeasurable";
+      angle_deg: number | null;
+      note_ar: string;
+    } | null;
   };
   privacy: { faces_hidden?: number; detector?: string; method?: string; notice?: string; manual_boxes?: number };
   analysis?: {

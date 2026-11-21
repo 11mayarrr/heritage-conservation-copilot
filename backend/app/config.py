@@ -38,6 +38,12 @@ class Settings(BaseSettings):
     bright_threshold: float = 215.0
     clipped_fraction_max: float = 0.25
 
+    # Camera tilt estimate (warning only, never rejects an image). Demo starting
+    # values: the acceptable tilt must be set by a restoration specialist.
+    tilt_frontal_deg: float = 8.0
+    tilt_warn_deg: float = 20.0
+    tilt_focal_factor: float = 0.75  # assumed focal length = factor x long side of the image
+
     # Privacy: the original upload is never written to disk; only the
     # face-anonymized copy is stored.
     face_method: str = "blur"  # "blur" or "pixelate"
