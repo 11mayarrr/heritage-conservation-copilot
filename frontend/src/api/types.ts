@@ -103,6 +103,8 @@ export interface Source {
   locator: string;
   url: string;
   quote: string;
+  /** Arabic paraphrase used instead of a quote for copyrighted sources. */
+  summary_ar?: string;
 }
 
 export interface Treatment {

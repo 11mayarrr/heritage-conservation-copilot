@@ -12,6 +12,18 @@
     "page_note": "أرقام الصفحات تقريبية (النص مأخوذ من نسخة ممسوحة ضوئيًا)."
   },
   {
+    "id": "unesco-atturaif-conservation-manual",
+    "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents): Part 3 Preservation Maintenance, and Part 4 Conservation Specification, Sections 04200-04296",
+    "publisher": "Lord Cultural Resources (manual, 2008), published in UNESCO World Heritage Centre document 168965",
+    "year": "2008",
+    "url": "https://whc.unesco.org/document/168965",
+    "license": "غير محدد: يُعامل كمادة محمية بحقوق النشر، فتُلخَّص مضامينه بالعربية ولا تُنسخ نصوصه",
+    "quote_policy": "summary_only",
+    "status": "read",
+    "context_note_ar": "الدليل الفني الخاص بحي الطريف نفسه (مواصفات ترميم الطوب الطيني وجدول الصيانة)، وهو أقرب مصدر للموقع وصلنا إليه، لكنه ليس «مكتبة المعالجات المعتمدة من التحدي». قُرئ عبر أداة قراءة آلية لملف PDF (نحو 200 ألف حرف من أصل 297 ألفًا؛ الباقي لم يُقرأ)، وقُرئت الأرقام الأساسية مرتين. المراجع الدقيقة مكتوبة برقم القسم والبند (Section/Part) لا برقم الصفحة، لأن أرقام الصفحات في النسخة المقروءة غير موثوقة. على مختص أن يطابق كل رقم مع الأصل قبل اعتماد أي معالجة. وفي المصدر نفسه تعارض واحد على الأقل (الجير ممنوع في الطوب والطلاء ومسموح في ملء الشقوق).",
+    "page_note": "المراجع برقم القسم والبند؛ أرقام الصفحات (للجزء 3 فقط) تقريبية."
+  },
+  {
     "id": "getty-terra-lit-review",
     "title": "Terra Literature Review: An Overview of Research in Earthen Architecture Conservation",
     "publisher": "Getty Conservation Institute",

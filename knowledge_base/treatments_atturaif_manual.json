@@ -1,0 +1,548 @@
+{
+  "library": "atturaif-conservation-manual",
+  "note": "Every entry below is derived only from the Atturaif Living Museum Conservation Manual (Lord Cultural Resources, 2008; UNESCO document 168965), read through an automated PDF reader (about 200k of 297k characters). The source is treated as copyrighted, so each entry carries an Arabic paraphrase (summary_ar) with the section/part locator instead of a verbatim quote. Numbers were read twice; a specialist must check them against the original. Status demo_unapproved until a conservation authority reviews them.",
+  "treatments": [
+    {
+      "id": "atturaif-crack-fill",
+      "damage_types": [
+        "crack"
+      ],
+      "title_ar": "ملء التشققات بالطين على دفعات (مواصفة حي الطريف)",
+      "method_ar": "تُنظَّف الشقوق من الحطام أولًا، ثم تُملأ بالطين على دفعات متتالية، وتُترك كل دفعة لتجف قبل التي تليها. لا تُملأ الدفعة الأخيرة إلى مستوى السطح، بل تُترك أخفض منه بمقدار نصف عرض الشق تقريبًا.",
+      "usage_ar": "تُنظَّف المفاصل بقضبان فولاذية رقيقة لأقصى عمق ممكن، وتُزال الأتربة بالفرشاة والنفخ، ويُدفع الطين بالأيدي ومجسّات من الخشب والمعدن. الدفعة الواحدة حتى 10-12 سم (و6 سم إذا كان الشق أعرض من 10 سم)، وبين الدفعات من نصف يوم إلى يومين.",
+      "materials": [
+        "مونة طينية (طين منخفض نحو 10% بالوزن مع رمل ناعم وغرين)",
+        "ماء"
+      ],
+      "tools": [
+        "قضبان فولاذية رقيقة لتنظيف الشقوق",
+        "فرشاة",
+        "مجسّات من الخشب والمعدن لدفع الطين",
+        "الأيدي"
+      ],
+      "cautions_ar": [
+        "التشقق الإنشائي (واسع أو ممتد أو متزايد) يفحصه مختص ترميم قبل أي ملء.",
+        "المصدر نفسه يمنع الجير في الطوب والطلاء ويجيزه في ملء الشقوق عند الحاجة: على المختص أن يحسم أي الحالتين تنطبق.",
+        "يذكر المصدر لبعض الشقوق شبكة تسليح بوليمرية وروابط ميكانيكية؛ لا تُنفَّذ إلا بقرار المختص لأننا لم نتحقق من شروط استخدامها.",
+        "قيود الطقس في المصدر: لا يُعمل عند حرارة أقل من 5 °م أو إذا توقع أن تنزل عن الصفر خلال 24 ساعة؛ وفوق 40 °م أو مع رياح تزيد على 7 م/ث تُظلَّل الأسطح الطازجة وتُرذَّذ بالماء لمنع الجفاف السريع.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "تشقق",
+        "شق",
+        "ملء",
+        "طين",
+        "مونة",
+        "الطريف",
+        "crack",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04230 (Crack Repair), Part 3.2 B and Part 3.4 C, E",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "طريقة التحضير والملء: تنظيف الشقوق بقضبان فولاذية رقيقة لأقصى عمق ممكن، وإزالة الحطام بالفرشاة والنفخ، ثم دفع الطين داخل الشق بالأيدي ومجسّات من الخشب والمعدن."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04230, Part 3.4 G, H, I",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "الدفعة الواحدة حتى 10-12 سم (6 سم إذا زاد عرض الشق على 10 سم)؛ تُترك الدفعة الأخيرة أخفض من السطح بمقدار نصف عرض الشق ولا تُملأ بمستواه؛ ومدة الجفاف بين الدفعات من نصف يوم إلى يومين."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04230, Part 1.5 A and Part 2.1 B-D",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "قيد الحرارة (لا إصلاح تحت 5 °م). ويذكر المصدر أيضًا شبكة تسليح بوليمرية (Tensar BX 1100) وروابط ميكانيكية، ويجيز الجير المطفأ أو الهيدروليكي إن رُئي أنسب."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 3.2 and Part 1.6 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا يُنفَّذ أي عمل ترميم دون إشراف مهني، وقرارات الموقع مسؤولية ممثل المالك الذي يُشترط أن يكون مدرّبًا وذا خبرة في ترميم الطوب الطيني."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-plaster-renewal",
+      "damage_types": [
+        "plaster_loss"
+      ],
+      "title_ar": "تجديد الطلاء الطيني الواقي (طبقة يُتوقع تآكلها وتجديدها)",
+      "method_ar": "يُعامَل الطلاء الطيني كطبقة واقية تتآكل وتُجدَّد دوريًا لتحمي الجدار الأصلي، وليس المطلوب منه تقليد ملمس الطلاء القديم. يوضع بطبقتين: طبقة أساس ثم طبقة نهائية، سماكة كل منهما نحو 12-15 مم.",
+      "usage_ar": "قبل الطلاء تُملأ الثقوب التي يزيد قطرها على 5 سم حتى نحو 3 سم تحت السطح (لا تُملأ بمستواه) وتُترك لتجف. تجف طبقة الأساس تمامًا من يوم إلى يومين قبل النهائية، ثم يوم إلى يومين للنهائية. يوضع الطلاء بالمالج أو باليد. تُنخَّل التربة قبل الاستعمال، ولا يعطي المصدر نسب خلط في الجزء المقروء بل اختبار محتوى الماء (أخدود بعمق نحو 5 سم ينتفخ دون أن يسيل).",
+      "materials": [
+        "تربة طينية مُنخَّلة للطلاء (نسب الخلط يحددها المختص)",
+        "ماء"
+      ],
+      "tools": [
+        "مالج",
+        "جلد خروف أو إسفنجة (مذكوران في خطوات التنفيذ)",
+        "منخل للتربة"
+      ],
+      "cautions_ar": [
+        "المصدر يمنع في الطلاء الطيني إضافة الإسمنت والجير والمستحلبات الإسفلتية والملدّنات والمواد المقوّية والطاردة للماء.",
+        "الطلاء التاريخي المتبقي يحتاج فحصًا تفصيليًا يجريه مرمّم قبل أي تدخل.",
+        "قيود الطقس في المصدر: لا يُعمل عند حرارة أقل من 5 °م أو إذا توقع أن تنزل عن الصفر خلال 24 ساعة؛ وفوق 40 °م أو مع رياح تزيد على 7 م/ث تُظلَّل الأسطح الطازجة وتُرذَّذ بالماء لمنع الجفاف السريع.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "طلاء",
+        "تقشر",
+        "تساقط",
+        "لياسة",
+        "تجديد",
+        "الطريف",
+        "plaster",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04220 (Surface Rendering), Part 1.2-1.3 and Part 3.4 C, E, F",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "الطلاء الطيني ليس دائمًا ويُجدَّد دوريًا، وهو طبقة تُضحَّى بها لحماية السطح الأصلي ولا تقلّد الملمس القديم؛ طبقة أساس ثم نهائية بسماكة نحو 12-15 مم لكل منهما، وجفاف يوم إلى يومين بين الطبقات."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04220, Part 3.3 C, D and Part 3.2 A, C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "تُملأ الثقوب الأكبر من 5 سم حتى نحو 3 سم تحت السطح ولا تُملأ بمستواه وتجف قبل الطلاء؛ تُنخَّل التربة؛ واختبار محتوى الماء بأخدود نحو 5 سم ينتفخ دون أن يسيل، مع نقع التربة الطينية طوال الليل."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04210, Part 3.1 A and Section 04220, Part 3.1 A",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "قائمة الإضافات الممنوعة في الطوب وفي الطلاء الطيني: الإسمنت والجير والمستحلبات الإسفلتية والملدّنات والمواد المقوّية والطاردة للماء."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 3.2 and Part 1.6 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا يُنفَّذ أي عمل ترميم دون إشراف مهني، وقرارات الموقع مسؤولية ممثل المالك الذي يُشترط أن يكون مدرّبًا وذا خبرة في ترميم الطوب الطيني."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-plaster-stabilize",
+      "damage_types": [
+        "plaster_loss"
+      ],
+      "title_ar": "تثبيت الطلاء التاريخي الهش أو المنفصل (إجراء ترميمي متخصص)",
+      "method_ar": "للطلاء السليم لكنه هش أو متقشر: يُرذَّذ بالماء ثم يوضع عليه ورق ياباني وتُدعَّم حوافه بمونة طينية ويُضغط برفق. أما الطلاء المنفصل فتُنقذ قطعه وتُدعَّم من الخلف بطين وشبكة تسليح ثم تُعاد بمونة طينية، وتُحشى حوافها، وتُزال أكياس الرمل الداعمة بعد التماسك.",
+      "usage_ar": "إجراء دقيق على طلاء تاريخي يقوم به مرمّم. تُعتمد الخلطة بعد لوحة اختبار، ولا يوضع الماء حتى يتجمع أو يتكوّن كحبات على السطح، ويُحمى العمل من المطر والشمس والمرور حتى يتماسك.",
+      "materials": [
+        "تربة ومونة طينية وفق القسم 04200",
+        "جير مطفأ (مدرج في مواد هذا القسم)",
+        "ورق ياباني",
+        "شبكة تسليح بوليمرية (Tensar BX 1100) للقطع المنفصلة",
+        "أكياس رمل للدعم المؤقت",
+        "ماء"
+      ],
+      "tools": [
+        "محاقن (Syringes)",
+        "الأيدي للضغط الخفيف"
+      ],
+      "cautions_ar": [
+        "الجير المطفأ مدرج في مواد هذا القسم بينما يمنعه المصدر في الطلاء الطيني الجديد (القسم 04220): يحسم المختص الحالة المناسبة.",
+        "لا يُنفَّذ إلا بيد مرمّم مدرَّب، ولا يُلمس الطلاء التاريخي قبل فحص تفصيلي.",
+        "قيود الطقس في المصدر: لا يُعمل عند حرارة أقل من 5 °م أو إذا توقع أن تنزل عن الصفر خلال 24 ساعة؛ وفوق 40 °م أو مع رياح تزيد على 7 م/ث تُظلَّل الأسطح الطازجة وتُرذَّذ بالماء لمنع الجفاف السريع.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "طلاء",
+        "تقشر",
+        "انفصال",
+        "هش",
+        "تثبيت",
+        "plaster",
+        "delamination",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04235 (Plaster Stabilization), Part 3.2 and 3.3",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "طريقتان: للطلاء السليم الهش تُرذَّذ المنطقة ويوضع ورق ياباني وتُبنى الحواف بمونة طينية ويُضغط برفق؛ وللطلاء المنفصل تُنقذ القطع وتُدعَّم بطين وشبكة Tensar BX 1100 وتُعاد بمونة طينية وتُحشى الحواف وتُزال أكياس الرمل بعد التماسك."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04235, Part 2.1 and Part 1.4 A, B and Part 3.3 A, B",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "المواد: تربة وفق القسم 04200 وجير مطفأ وورق ياباني ومحاقن وأكياس رمل وشبكة BX 1100؛ تُعتمد الخلطة بعد لوحة اختبار؛ ولا يُوضع الماء حتى يتجمع على السطح؛ ويُحمى من المطر والشمس والمرور حتى التماسك؛ ولا إصلاح تحت 5 °م."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Conservation Manual Part 3, p. 42 (approximate page)",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "يشير الدليل إلى لزوم فحص تفصيلي لما تبقى من الطلاء التاريخي يجريه مرمّم."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 3.2 and Part 1.6 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا يُنفَّذ أي عمل ترميم دون إشراف مهني، وقرارات الموقع مسؤولية ممثل المالك الذي يُشترط أن يكون مدرّبًا وذا خبرة في ترميم الطوب الطيني."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-wall-base-repair",
+      "damage_types": [
+        "moisture_erosion",
+        "material_loss"
+      ],
+      "title_ar": "إصلاح قاعدة الجدار المتآكلة بطوب طيني جديد متداخل مع الأصلي",
+      "method_ar": "يُقطع الطوب المتضرر بنمط متدرّج، ثم يُركَّب طوب طيني جديد بنمط «مُسنَّن» متداخل مع البناء الأصلي. إذا كان الفراغ أعرض من قشرة واحدة من سُمك الجدار، تُبنى الصفوف الداخلية أولًا وتُترك لتتماسك 72 ساعة على الأقل قبل بناء القشرة الخارجية.",
+      "usage_ar": "تُستعمل أكياس الرمل ورمل الردم، وتُشدّ خيوط أفقية ورأسية لضبط الاستقامة، وتُختار أدوات تقلل التدخل في الجدار الأصلي إلى أدنى حد.",
+      "materials": [
+        "طوب طيني جديد (طين لا يزيد على 25% وحبيبات لا تتجاوز 1 سم وبلا تبن)",
+        "مونة طينية (طين منخفض نحو 10% بالوزن مع رمل ناعم وغرين)",
+        "ماء صالح للشرب",
+        "أكياس رمل ورمل ردم"
+      ],
+      "tools": [
+        "خيوط شدّ أفقية ورأسية",
+        "أدوات يدوية تُختار لأدنى تدخل (المصدر لا يحدد قائمة)"
+      ],
+      "cautions_ar": [
+        "المصدر يمنع إضافة التبن أو أي مواد نباتية إلى الطوب، بخلاف معالجات مأخوذة من مرجع NPS الأمريكي في المكتبة تذكر التبن: يحسم المختص أيهما يناسب هذا الجدار.",
+        "المصدر يمنع في الطوب الطيني إضافة الإسمنت والجير والمستحلبات الإسفلتية والملدّنات والمواد المقوّية والطاردة للماء.",
+        "إن لزم دعم مؤقت للجدار فقراره لممثل المالك (القسم 04296).",
+        "قيود الطقس في المصدر: لا يُعمل عند حرارة أقل من 5 °م أو إذا توقع أن تنزل عن الصفر خلال 24 ساعة؛ وفوق 40 °م أو مع رياح تزيد على 7 م/ث تُظلَّل الأسطح الطازجة وتُرذَّذ بالماء لمنع الجفاف السريع.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "قاعدة",
+        "تآكل",
+        "رطوبة",
+        "طوب",
+        "ترميم",
+        "الطريف",
+        "base",
+        "erosion",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04260 (Wall Base Repair), Part 3.2 A and Part 3.3 A, F",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "يُقطع الطوب بنمط متدرّج ويُركَّب الجديد بنمط مُسنَّن متداخل مع الأصلي؛ وإذا زاد عرض الفراغ على قشرة واحدة تُبنى الصفوف الداخلية وتُترك 72 ساعة على الأقل قبل الخارجية."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04260, Part 2.1 and Part 3.1 E and Part 3.2 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "المواد: تربة المونة وطوب طيني وماء صالح للشرب وأكياس رمل ورمل ردم؛ ولا قائمة أدوات، بل تُختار أدوات تقلل التدخل؛ وتُستعمل خيوط أفقية ورأسية."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 2.1 A and Section 04210, Part 1.4 F and Part 3.1 A",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "مواصفة الطوب: الطين مماثل للأصل ولا يزيد على 25% وحبيبات لا تتجاوز 1 سم؛ لا تبن ولا مواد نباتية؛ ولا إسمنت ولا جير ولا مستحلبات إسفلتية ولا ملدّنات ولا مواد مقوّية أو طاردة للماء."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04296 (Bracing and Shoring), Part 1.1 and 1.3 B-C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "الدعم المؤقت يكون لحالات الحفر الأثري أو الطوارئ، ويراجع ممثل المالك استخدامه قبل التنفيذ وأثناءه ويعتمد أي تغيير."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-void-hole-repair",
+      "damage_types": [
+        "material_loss"
+      ],
+      "title_ar": "سدّ الفراغات والثقوب في الجدار بطوب ومونة طينية",
+      "method_ar": "يُصوَّر الموضع قبل أي تحضير، ثم يُنظَّف الفراغ من الحطام بالكشط والفرشاة والنفخ، وتُنظَّف المفاصل بقضبان فولاذية رقيقة لأقصى عمق ممكن، ثم يُسدّ بطوب ومونة طينية. تُستبعد التربة الغنية بالطين.",
+      "usage_ar": "يوثَّق كل موضع بالتصوير قبل التحضير ويُوثَّق مرة ثانية بعد التحضير وقبل بدء الإصلاح. يُفحص الفراغ بحثًا عن حشرات، فإن لزم عولج بمبيد معتمد.",
+      "materials": [
+        "طوب طيني جديد (طين لا يزيد على 25% وحبيبات لا تتجاوز 1 سم وبلا تبن)",
+        "مونة طينية (طين منخفض نحو 10% بالوزن مع رمل ناعم وغرين)",
+        "ماء صالح للشرب"
+      ],
+      "tools": [
+        "أداة كشط",
+        "فرشاة",
+        "قضبان فولاذية رقيقة لتنظيف المفاصل"
+      ],
+      "cautions_ar": [
+        "المصدر يقول: لا تُستخدم التربة الغنية بالطين في هذه الأعمال.",
+        "يذكر المصدر شبكة تسليح بوليمرية (Tensar) ضمن مواد هذا القسم؛ استخدامها قرار المختص.",
+        "اختيار المبيد (إن وُجدت حشرات) قرار المختص.",
+        "المصدر يمنع في الطوب الطيني إضافة الإسمنت والجير والمستحلبات الإسفلتية والملدّنات والمواد المقوّية والطاردة للماء.",
+        "قيود الطقس في المصدر: لا يُعمل عند حرارة أقل من 5 °م أو إذا توقع أن تنزل عن الصفر خلال 24 ساعة؛ وفوق 40 °م أو مع رياح تزيد على 7 م/ث تُظلَّل الأسطح الطازجة وتُرذَّذ بالماء لمنع الجفاف السريع.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "فراغ",
+        "ثقب",
+        "فقدان",
+        "حفرة",
+        "طوب",
+        "سد",
+        "الطريف",
+        "void",
+        "hole",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04270 (Void and Hole Repair), Part 3.2 B, D, F",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "كل موضع يُوثَّق بالتصوير قبل أي تحضير ويُوثَّق ثانيةً بعد التحضير وقبل الإصلاح؛ وتُزال الأتربة بالكشط والفرشاة والنفخ؛ وتُنظَّف المفاصل بقضبان فولاذية رقيقة لأقصى عمق ممكن."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04270, Part 3.2 C, H",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "يُفحص الموضع بحثًا عن حشرات ويُعالج بمبيد معتمد إن لزم؛ ولا تُستخدم التربة الغنية بالطين."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04270, Part 2.1",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "المواد: تربة المونة وطوب طيني وماء صالح للشرب وشبكة تسليح بوليمرية (Tensar Biaxial)."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 3.2 and Part 1.6 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا يُنفَّذ أي عمل ترميم دون إشراف مهني، وقرارات الموقع مسؤولية ممثل المالك الذي يُشترط أن يكون مدرّبًا وذا خبرة في ترميم الطوب الطيني."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-wall-top-cap",
+      "damage_types": [
+        "edge_erosion",
+        "material_loss"
+      ],
+      "title_ar": "تثبيت أعلى الجدار بغطاء طيني يُضحَّى به",
+      "method_ar": "تُزال المواد السائبة من أعلى الجدار بالكشط والفرشاة، ثم يُبنى غطاء من طوب طيني فوق طبقة مونة فراش بسماكة 15-25 مم تقريبًا. يُستخدم الغطاء حيث يقرر المختص حاجة الجدار إليه.",
+      "usage_ar": "يمكن أن يلي الصف الثاني الأول مباشرة، ثم يُترك يومًا إلى يومين ليجف. تُنقَّش مفاصل المونة بفرشاة قاسية الشعر. تربة الغطاء هي نفسها تربة المونة الطينية، ويجوز إضافة حجارة صغيرة لأجل المظهر.",
+      "materials": [
+        "طوب طيني جديد (طين لا يزيد على 25% وحبيبات لا تتجاوز 1 سم وبلا تبن)",
+        "مونة طينية (طين منخفض نحو 10% بالوزن مع رمل ناعم وغرين) بسماكة فراش 15-25 مم",
+        "حجارة صغيرة (اختيارية لأجل المظهر)",
+        "ماء صالح للشرب"
+      ],
+      "tools": [
+        "أداة كشط",
+        "فرشاة قاسية الشعر لتنقيش المفاصل",
+        "فرشاة سلكية"
+      ],
+      "cautions_ar": [
+        "لا تُخلط المونة ولا تُصلح رؤوس الجدران أثناء المطر.",
+        "رؤوس الجدران تُفحص بحثًا عن الشقوق ضمن الصيانة الدورية.",
+        "المصدر يمنع في الطوب الطيني إضافة الإسمنت والجير والمستحلبات الإسفلتية والملدّنات والمواد المقوّية والطاردة للماء.",
+        "لا يُنفَّذ أي عمل ترميم دون إشراف مهني؛ هذه معالجة مقترحة وليست أمر تنفيذ."
+      ],
+      "keywords": [
+        "حافة",
+        "أعلى الجدار",
+        "غطاء",
+        "تآكل الحواف",
+        "رأس الجدار",
+        "الطريف",
+        "edge",
+        "cap",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200 (General), Part 1.3 B (item 7)",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "من أعمال التدخل المقررة: تثبيت أعلى الجدران بغطاء يُضحَّى به حيث يُرى ذلك ضروريًا."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04280 (Mud Brick Capping), Part 3.3 D, F, J",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "مونة الفراش نحو 15-25 مم؛ يمكن وضع الصف الثاني بعد الأول دون انتظار؛ ثم يُترك يومًا إلى يومين ليجف."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04280, Part 2.1 and Part 3.2 B and 3.3 I, K",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "تربة الغطاء نفسها تربة المونة ويجوز إضافة حجارة صغيرة لأجل المظهر؛ الكشط والفرشاة لإزالة السائب؛ فرشاة قاسية الشعر لتنقيش المفاصل وفرشاة سلكية."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 1.7 A",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا تُخلط المونة ولا تُصلح رؤوس الجدران أثناء المطر."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04200, Part 3.2 and Part 1.6 C",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "لا يُنفَّذ أي عمل ترميم دون إشراف مهني، وقرارات الموقع مسؤولية ممثل المالك الذي يُشترط أن يكون مدرّبًا وذا خبرة في ترميم الطوب الطيني."
+        }
+      ]
+    },
+    {
+      "id": "atturaif-routine-maintenance",
+      "damage_types": [
+        "moisture_erosion",
+        "plaster_loss",
+        "crack",
+        "edge_erosion",
+        "material_loss"
+      ],
+      "title_ar": "الصيانة الدورية والفحص وتصريف المياه (جدول دليل الطريف)",
+      "method_ar": "يربط الدليل بقاء الجدران بصيانة دورية منتظمة: ترقيع الطلاء الطيني عند قواعد الجدران سنويًا، وتنظيف مصارف الأسطح موسميًا وبما لا يقل عن مرة كل ثلاثة أشهر، وفحص رؤوس الجدران بحثًا عن الشقوق، والتأكد من الحفاظ على ميل موجب عند التقاء الجدار بالأرض أو الرصف.",
+      "usage_ar": "تُستخدم قوائم الفحص في الدليل لجدولة الرصد. الفحص الشامل يحتاج فريقًا من شخصين، وبعض الأعمال الدورية قد تتجاوز مهارات طاقم الموقع فتحتاج تعاقدًا خارجيًا.",
+      "materials": [
+        "لا ينطبق (إجراء فحص وصيانة؛ الترقيع يستخدم مواد الطلاء الطيني)"
+      ],
+      "tools": [
+        "قوائم الفحص الدورية الواردة في الدليل",
+        "فريق فحص من شخصين للفحص الشامل"
+      ],
+      "cautions_ar": [
+        "يتعارض المصدر مع نفسه في دورية الفحص الشامل: كل ستة أشهر في الإرشاد العام وسنويًا في جدول المبنى 5؛ يحدد المختص الدورية.",
+        "جدول الدليل مثال لمبنى واحد (المبنى 5) وليس جدولًا عامًا لكل المباني.",
+        "الرصد لا يغني عن التدخل عند ظهور تلف نشط."
+      ],
+      "keywords": [
+        "صيانة",
+        "دورية",
+        "فحص",
+        "تصريف",
+        "مصارف",
+        "رطوبة",
+        "رصد",
+        "الطريف",
+        "maintenance",
+        "drainage",
+        "atturaif"
+      ],
+      "approval": "demo_unapproved",
+      "sources": [
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Conservation Manual Part 3, p. 41 (approximate page; Block 5 example schedule)",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "ترقيع الطلاء الطيني عند قواعد الجدران قرب المدخل والدرج: سنويًا؛ تنظيف مصارف السقف: موسميًا وبما لا يقل عن مرة كل ربع سنة."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Conservation Manual Part 3, p. 40 (approximate page; inspection checklist 2 b and 5 a)",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "قائمة الفحص تسأل عن شقوق أعلى الجدران والأسوار، وعن الحفاظ على ميل موجب عند التقاء الجدار بالأرض أو الرصف."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Conservation Manual Part 3, pp. 38-39 and 41-42 (approximate pages)",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "الفحص الشامل بفريق من شخصين وكل ستة أشهر في الإرشاد العام (وسنويًا في جدول المبنى 5)؛ الأعمال الدورية قد تحتاج تعاقدًا؛ وفحص تفصيلي للطلاء التاريخي يجريه مرمّم."
+        },
+        {
+          "title": "Atturaif Living Museum Conservation Manual (Annex A of the At-Turaif District nomination documents)",
+          "publisher": "Lord Cultural Resources (via UNESCO World Heritage Centre)",
+          "year": "2008",
+          "locator": "Section 04220, Part 1.2-1.3",
+          "url": "https://whc.unesco.org/document/168965",
+          "quote": "",
+          "summary_ar": "الطلاء الطيني ليس دائمًا ويُجدَّد دوريًا، وهو طبقة تُضحَّى بها لحماية الأصل."
+        }
+      ]
+    }
+  ]
+}

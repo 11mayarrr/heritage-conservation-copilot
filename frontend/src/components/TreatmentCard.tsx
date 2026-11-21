@@ -1,6 +1,6 @@
 import type { Treatment } from "../api/types";
 
-export function SourceList({ t, max = 3 }: { t: Treatment; max?: number }) {
+export function SourceList({ t, max = 5 }: { t: Treatment; max?: number }) {
   return (
     <div>
       {t.sources.slice(0, max).map((s, i) => (
@@ -17,6 +17,11 @@ export function SourceList({ t, max = 3 }: { t: Treatment; max?: number }) {
             — {s.publisher}، {s.year} — <span dir="ltr">{s.locator}</span>
           </small>
           {s.quote && <div className="src-quote">“{s.quote}”</div>}
+          {!s.quote && s.summary_ar && (
+            <div className="src-quote">
+              <b>ملخص بصياغتنا:</b> {s.summary_ar}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -59,7 +64,7 @@ export function TreatmentCard({ t, compact = false }: { t: Treatment; compact?: 
           <ul>{t.cautions_ar.map((c) => <li key={c}>{c}</li>)}</ul>
         </div>
       )}
-      <SourceList t={t} max={compact ? 1 : 3} />
+      <SourceList t={t} max={compact ? 1 : 5} />
       <small className="muted">توصية أولية وتحتاج إلى اعتماد مختص الترميم.</small>
     </div>
   );
