@@ -82,7 +82,7 @@ python scripts/make_synthetic_samples.py   # يكتب sample_data/synthetic/
 ## الاختبارات
 
 ```bash
-python -m pytest -q tests                 # 47 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان، الشبكة لكل جدار، طمس الوجوه)
+python -m pytest -q tests                 # 177 اختبارًا (رؤية، تحديد ذكي، قاعدة معرفة، API، مقاييس، تطابق الألوان، الشبكة لكل جدار، طمس الوجوه)
 HCC_TEST_DATABASE_URL=postgresql+psycopg://hcc:hcc@localhost/hcc python -m pytest -q tests   # على PostgreSQL
 cd frontend && npm test && npm run build
 ```
