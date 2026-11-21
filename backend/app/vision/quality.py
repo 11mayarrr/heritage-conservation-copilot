@@ -1,4 +1,4 @@
-"""Image Quality Assessment: sharpness, exposure and resolution.
+"""Image Quality Assessment: sharpness, exposure, resolution and a rough camera tilt.
 
 Thresholds are starting values chosen for a demo; they must be tuned on real
 At-Turaif photos before field use (see README, "Limitations")."""
@@ -11,6 +11,7 @@ import numpy as np
 
 from app.config import get_settings
 from app.vision.imageio import resize_max
+from app.vision.tilt import PARTIAL, STRONG, UNMEASURABLE, estimate_tilt
 
 
 @dataclass
@@ -25,6 +26,7 @@ class QualityReport:
     contrast: float
     issues: list[str] = field(default_factory=list)  # blocking, Arabic
     warnings: list[str] = field(default_factory=list)  # non-blocking, Arabic
+    tilt: dict | None = None  # rough camera-tilt estimate; None when the image was rejected
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -63,9 +65,14 @@ def assess_quality(img: np.ndarray) -> QualityReport:
         issues.append("جزء كبير من الصورة معتم بالكامل (ظل قوي).")
     if contrast < 18:
         warnings.append("تباين الصورة منخفض، قد يصعب تمييز حدود التلف.")
-    warnings.append(
-        "لا يقيس النظام زاوية التصوير آليًا بعد. صوّر الجدار بشكل عمودي قدر الإمكان."
-    )
+    tilt = None
+    if not issues:  # a rejected image is retaken anyway
+        est = estimate_tilt(
+            img, focal_factor=s.tilt_focal_factor, frontal_deg=s.tilt_frontal_deg, warn_deg=s.tilt_warn_deg
+        )
+        tilt = est.to_dict()
+        if est.status in (STRONG, PARTIAL, UNMEASURABLE):
+            warnings.append(est.note_ar)  # warning only: the tilt never blocks an image
 
     return QualityReport(
         acceptable=not issues,
@@ -78,4 +85,5 @@ def assess_quality(img: np.ndarray) -> QualityReport:
         contrast=round(contrast, 1),
         issues=issues,
         warnings=warnings,
+        tilt=tilt,
     )
