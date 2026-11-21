@@ -165,7 +165,7 @@ def test_export_endpoints_require_approval_then_return_files(client, samples):
     for kind in ("xlsx", "geojson"):
         res = client.get(f"/api/inspections/{iid}/export.{kind}")
         assert res.status_code == 409
-        assert "اعتماد" in res.json()["detail"]
+        assert res.json()["detail"] == ex.NOT_APPROVED_AR
 
     assert client.post(f"/api/inspections/{iid}/approve", json={"reason": "نهائي"}, headers=USER).status_code == 200
 
