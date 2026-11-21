@@ -9,6 +9,7 @@ export/
 node_modules/
 frontend/dist/
 sample_data/synthetic/
+sample_data/generated/
 *.log
 .DS_Store
 models/
