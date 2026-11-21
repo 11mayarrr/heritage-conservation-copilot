@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import type { DamageType, Priority, Region, Retrieval } from "../api/types";
+import { APPROVE_ONLY_HINT, canApprove } from "../lib/auth";
 import { DAMAGE, DAMAGE_TYPES, INSUFFICIENT_AR, PRIORITY } from "../lib/constants";
 import { pct } from "../lib/format";
 import { joinList, splitList } from "../lib/lists";
 import { Confidence, DamageLabel, RegionFlags } from "./Badges";
+import { useAuth } from "./AuthProvider";
 import { TreatmentCard } from "./TreatmentCard";
 
 interface Props {
@@ -27,6 +29,8 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const { me } = useAuth();
+  const mayApprove = canApprove(me?.role);
   const [retrieval, setRetrieval] = useState<Retrieval | null>(null);
 
   useEffect(() => {
@@ -171,7 +175,7 @@ export function RegionPanel({ inspectionId, region, locked, onChanged, onDeleted
       {err && <div className="banner danger">{err}</div>}
       <div className="toolbar">
         <button className="primary" disabled={busy} onClick={save}>حفظ التعديل</button>
-        <button className="ok" disabled={busy || region.status === "approved"} onClick={() => run(() => api.approveRegion(inspectionId, region.id, reason), () => onChanged())}>اعتماد المنطقة</button>
+        <button className="ok" disabled={busy || !mayApprove || region.status === "approved"} title={mayApprove ? undefined : APPROVE_ONLY_HINT} onClick={() => run(() => api.approveRegion(inspectionId, region.id, reason), () => onChanged())}>اعتماد المنطقة</button>
         <button disabled={busy} onClick={() => run(() => api.returnRegion(inspectionId, region.id, reason), () => onChanged())}>إعادة للمراجعة</button>
         <button className="danger" disabled={busy} onClick={() => run(() => api.deleteRegion(inspectionId, region.id, reason || "نتيجة خاطئة"), onDeleted)}>حذف النتيجة</button>
       </div>

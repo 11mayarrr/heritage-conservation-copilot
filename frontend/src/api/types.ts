@@ -52,6 +52,15 @@ export interface Glossary {
   terms: GlossaryTerm[];
 }
 
+export type Role = "assistant" | "specialist";
+/** The signed-in account (what GET /api/auth/me returns). */
+export interface Me {
+  username: string;
+  display_name: string;
+  role: Role;
+  role_ar: string;
+}
+
 export interface Region {
   id: string;
   index: number;

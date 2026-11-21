@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import current_user
+from app.api.deps import current_user, require_specialist
 from app.database.models import Inspection, Region, Wall
 from app.database.session import get_db
 from app.models.enums import RegionStatus
@@ -125,7 +125,7 @@ def set_notes(inspection_id: str, body: InspectionNotes, db: Session = Depends(g
 
 
 @router.post("/inspections/{inspection_id}/approve")
-def approve(inspection_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(current_user)):
+def approve(inspection_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(require_specialist)):
     return svc.inspection_out(_guard(svc.approve_inspection, db, _insp(db, inspection_id), user, body.reason))
 
 
@@ -207,7 +207,7 @@ def delete_region(inspection_id: str, region_id: str, reason: str = "", db: Sess
 
 
 @router.post("/inspections/{inspection_id}/regions/{region_id}/approve")
-def approve_region(inspection_id: str, region_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(current_user)):
+def approve_region(inspection_id: str, region_id: str, body: ReviewAction, db: Session = Depends(get_db), user: str = Depends(require_specialist)):
     r = _guard(svc.set_region_status, db, _region(db, inspection_id, region_id), RegionStatus.APPROVED, user, body.reason)
     return svc.region_out(r)
 
